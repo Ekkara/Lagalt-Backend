@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Lagalt_Backend.Models;
 using Lagalt_Backend.Services;
+using Lagalt_Backend.Exceptions;
+using System.Net;
 
 namespace Lagalt_Backend.Controllers
 {
@@ -23,23 +25,26 @@ namespace Lagalt_Backend.Controllers
 
         // GET: api/Users
         [HttpGet]
-        public async Task<IEnumerable<User>> GetUsers()
+        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
-            return await _userService.GetAllUsers();
+            return Ok(await _userService.GetAllUsers());
         }
 
-        /*// GET: api/Users/5
+        // GET: api/Users/5
         [HttpGet("{id}")]
         public async Task<ActionResult<User>> GetUser(int id)
         {
-            var user = await _context.Users.FindAsync(id);
-
-            if (user == null)
+            try
             {
-                return NotFound();
+                return await _userService.GetUserById(id);
             }
-
-            return user;
+            catch (UserNotFoundException ex)
+            {
+                return NotFound(new ProblemDetails
+                {
+                    Detail = ex.Message,
+                });
+            }
         }
 
         // PUT: api/Users/5
@@ -52,22 +57,16 @@ namespace Lagalt_Backend.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(user).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                await _userService.UpdateUser(user);
             }
-            catch (DbUpdateConcurrencyException)
+            catch (UserNotFoundException ex)
             {
-                if (!UserExists(id))
+                return NotFound(new ProblemDetails
                 {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                    Detail = ex.Message,
+                });
             }
 
             return NoContent();
@@ -78,32 +77,26 @@ namespace Lagalt_Backend.Controllers
         [HttpPost]
         public async Task<ActionResult<User>> PostUser(User user)
         {
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetUser", new { id = user.Id }, user);
+            return CreatedAtAction("GetUser", new { id = user.Id }, await _userService.AddUser(user));
         }
 
         // DELETE: api/Users/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
-            var user = await _context.Users.FindAsync(id);
-            if (user == null)
+            try
             {
-                return NotFound();
+                await _userService.DeleteUser(id);
             }
-
-            _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
+            catch (UserNotFoundException ex)
+            {
+                return NotFound(new ProblemDetails
+                {
+                    Detail = ex.Message,
+                });
+            }
 
             return NoContent();
         }
-
-        private bool UserExists(int id)
-        {
-            return _context.Users.Any(e => e.Id == id);
-        }
-        */
     }
 }

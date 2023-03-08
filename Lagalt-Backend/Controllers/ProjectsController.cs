@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Lagalt_Backend.Models;
 using Lagalt_Backend.Services;
+using Lagalt_Backend.Exceptions;
 
 namespace Lagalt_Backend.Controllers
 {
@@ -28,82 +29,73 @@ namespace Lagalt_Backend.Controllers
             return await _projectService.GetAllProjects();
         }
 
-        /*// GET: api/Users/5
+        // GET: api/Projects/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(int id)
+        public async Task<ActionResult<Project>> GetProject(int id)
         {
-            var user = await _context.Users.FindAsync(id);
-
-            if (user == null)
+            try
             {
-                return NotFound();
+                return await _projectService.GetProjectById(id);
             }
-
-            return user;
+            catch (ProjectNotFoundException ex)
+            {
+                return NotFound(new ProblemDetails
+                {
+                    Detail = ex.Message,
+                });
+            }
         }
 
-        // PUT: api/Users/5
+        // PUT: api/Projects/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(int id, User user)
+        public async Task<IActionResult> PutProject(int id, Project project)
         {
-            if (id != user.Id)
+            if (id != project.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(user).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                await _projectService.UpdateProject(project);
             }
-            catch (DbUpdateConcurrencyException)
+            catch (ProjectNotFoundException ex)
             {
-                if (!UserExists(id))
+                return NotFound(new ProblemDetails
                 {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                    Detail = ex.Message,
+                });
             }
 
             return NoContent();
         }
 
-        // POST: api/Users
+        // POST: api/Projects
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<User>> PostUser(User user)
+        public async Task<ActionResult<Project>> PostProject(Project project)
         {
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetUser", new { id = user.Id }, user);
+            return CreatedAtAction("GetProjects", new { id = project.Id }, await _projectService.AddProject(project));
         }
 
-        // DELETE: api/Users/5
+        // DELETE: api/Projects/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(int id)
+        public async Task<IActionResult> DeleteProject(int id)
         {
-            var user = await _context.Users.FindAsync(id);
-            if (user == null)
+            try
             {
-                return NotFound();
+                await _projectService.DeleteProject(id);
             }
-
-            _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
+            catch (ProjectNotFoundException ex)
+            {
+                return NotFound(new ProblemDetails
+                {
+                    Detail = ex.Message,
+                });
+            }
 
             return NoContent();
         }
-
-        private bool UserExists(int id)
-        {
-            return _context.Users.Any(e => e.Id == id);
-        }
-        */
     }
 }
