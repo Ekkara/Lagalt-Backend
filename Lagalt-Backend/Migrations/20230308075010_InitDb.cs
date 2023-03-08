@@ -4,8 +4,10 @@
 
 namespace Lagalt_Backend.Migrations
 {
-    public partial class addmigrationInitDv : Migration
+    /// <inheritdoc />
+    public partial class InitDb : Migration
     {
+        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
@@ -38,6 +40,7 @@ namespace Lagalt_Backend.Migrations
                 });
         }
 
+        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(

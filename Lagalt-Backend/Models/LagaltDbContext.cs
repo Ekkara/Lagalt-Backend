@@ -1,5 +1,4 @@
-﻿using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace Lagalt_Backend.Models
 {
@@ -8,22 +7,9 @@ namespace Lagalt_Backend.Models
         public DbSet<User> Users { get; set; }
         public DbSet<Project> Projects { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public LagaltDbContext(DbContextOptions options) : base(options)
         {
-            optionsBuilder.UseSqlServer(GetConnectionString());
-        }
-
-        private static string GetConnectionString()
-        {
-            var builder = new SqlConnectionStringBuilder
-            {
-                DataSource = "localhost\\SQLEXPRESS",
-                InitialCatalog = "LagaltDatabase",
-                IntegratedSecurity = true,
-                TrustServerCertificate = true
-            };
-
-            return builder.ConnectionString;
+            
         }
     }
 }
