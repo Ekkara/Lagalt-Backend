@@ -51,7 +51,7 @@ namespace Lagalt_Backend.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutProject(int id, Project project)
         {
-            if (id != project.Id)
+            if (id != project.ProjectId)
             {
                 return BadRequest();
             }
@@ -76,7 +76,7 @@ namespace Lagalt_Backend.Controllers
         [HttpPost]
         public async Task<ActionResult<Project>> PostProject(Project project)
         {
-            return CreatedAtAction("GetProjects", new { id = project.Id }, await _projectService.AddProject(project));
+            return CreatedAtAction("GetProjects", new { id = project.ProjectId }, await _projectService.AddProject(project));
         }
 
         // DELETE: api/Projects/5

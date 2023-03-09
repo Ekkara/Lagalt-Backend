@@ -32,10 +32,10 @@ namespace Lagalt_Backend.Services
 
         public async Task<User> UpdateUser(User user)
         {
-            var searchedUser = await _context.Users.FindAsync(user.Id);
+            var searchedUser = await _context.Users.FindAsync(user.UserId);
             if (searchedUser == null)
             {
-                throw new UserNotFoundException(user.Id);
+                throw new UserNotFoundException(user.UserId);
             }
 
             await _context.SaveChangesAsync();

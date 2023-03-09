@@ -52,7 +52,7 @@ namespace Lagalt_Backend.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutUser(int id, User user)
         {
-            if (id != user.Id)
+            if (id != user.UserId)
             {
                 return BadRequest();
             }
@@ -77,7 +77,7 @@ namespace Lagalt_Backend.Controllers
         [HttpPost]
         public async Task<ActionResult<User>> PostUser(User user)
         {
-            return CreatedAtAction("GetUser", new { id = user.Id }, await _userService.AddUser(user));
+            return CreatedAtAction("GetUser", new { id = user.UserId }, await _userService.AddUser(user));
         }
 
         // DELETE: api/Users/5

@@ -1,20 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\MNiazi.CORP\\Documents\\GitHub\\Lagalt-Backend\\Lagalt-Backend\\Lagalt-Backend.csproj": {}
+    "C:\\Users\\TPham1\\Source\\Repos\\Lagalt-Backend\\Lagalt-Backend\\Lagalt-Backend.csproj": {}
   },
   "projects": {
-    "C:\\Users\\MNiazi.CORP\\Documents\\GitHub\\Lagalt-Backend\\Lagalt-Backend\\Lagalt-Backend.csproj": {
+    "C:\\Users\\TPham1\\Source\\Repos\\Lagalt-Backend\\Lagalt-Backend\\Lagalt-Backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\MNiazi.CORP\\Documents\\GitHub\\Lagalt-Backend\\Lagalt-Backend\\Lagalt-Backend.csproj",
+        "projectUniqueName": "C:\\Users\\TPham1\\Source\\Repos\\Lagalt-Backend\\Lagalt-Backend\\Lagalt-Backend.csproj",
         "projectName": "Lagalt-Backend",
-        "projectPath": "C:\\Users\\MNiazi.CORP\\Documents\\GitHub\\Lagalt-Backend\\Lagalt-Backend\\Lagalt-Backend.csproj",
-        "packagesPath": "C:\\Users\\MNiazi.CORP\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\MNiazi.CORP\\Documents\\GitHub\\Lagalt-Backend\\Lagalt-Backend\\obj\\",
+        "projectPath": "C:\\Users\\TPham1\\Source\\Repos\\Lagalt-Backend\\Lagalt-Backend\\Lagalt-Backend.csproj",
+        "packagesPath": "C:\\Users\\TPham1\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\TPham1\\Source\\Repos\\Lagalt-Backend\\Lagalt-Backend\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\MNiazi.CORP\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\TPham1\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -22,6 +26,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -40,6 +45,10 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[6.0.14, )"
+            },
             "Microsoft.AspNetCore.Mvc.NewtonsoftJson": {
               "target": "Package",
               "version": "[6.0.14, )"
