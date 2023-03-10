@@ -16,12 +16,12 @@ namespace Lagalt_Backend.Models
         {
             modelBuilder.Entity<User>().HasData(
                 new User { Id = 1, UserName = "Maddie", Hidden = true},
-                new User { Id = 2, UserName = "Davis", Hidden = false}
+                new User { Id = 2, UserName = "Alice", Hidden = false}
                 );
 
             modelBuilder.Entity<Project>().HasData(
-                new Project { Id = 1, ProjectName = "My New Game", ProjectCategoryId = 1, ProjectCategoryName = "Games" },
-                new Project { Id = 2, ProjectName = "My Awesome Song", ProjectCategoryId = 2, ProjectCategoryName = "Music" }
+                new Project { Id = 1, ProjectName = "Final Fantasy XIV", ProjectDescription = "World-Class MMORPG", ProjectCategoryId = 1, ProjectCategoryName = "Games", ProjectIsAvailable = true },
+                new Project { Id = 2, ProjectName = "Scream", ProjectDescription = "Rock song doubling as a boss theme", ProjectCategoryId = 2, ProjectCategoryName = "Music", ProjectIsAvailable = false }
                 );
         }
 

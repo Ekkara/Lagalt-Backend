@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Lagalt_Backend.Migrations
 {
     [DbContext(typeof(LagaltDbContext))]
-    [Migration("20230308075010_InitDb")]
+    [Migration("20230310105648_Init Db")]
     partial class InitDb
     {
         /// <inheritdoc />
@@ -39,6 +39,13 @@ namespace Lagalt_Backend.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ProjectDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("ProjectIsAvailable")
+                        .HasColumnType("bit");
+
                     b.Property<string>("ProjectName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -46,6 +53,26 @@ namespace Lagalt_Backend.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Projects");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ProjectCategoryId = 1,
+                            ProjectCategoryName = "Games",
+                            ProjectDescription = "World-Class MMORPG",
+                            ProjectIsAvailable = true,
+                            ProjectName = "Final Fantasy XIV"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            ProjectCategoryId = 2,
+                            ProjectCategoryName = "Music",
+                            ProjectDescription = "Rock song doubling as a boss theme",
+                            ProjectIsAvailable = false,
+                            ProjectName = "Scream"
+                        });
                 });
 
             modelBuilder.Entity("Lagalt_Backend.Models.User", b =>
@@ -66,6 +93,20 @@ namespace Lagalt_Backend.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Hidden = true,
+                            UserName = "Maddie"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Hidden = false,
+                            UserName = "Alice"
+                        });
                 });
 #pragma warning restore 612, 618
         }

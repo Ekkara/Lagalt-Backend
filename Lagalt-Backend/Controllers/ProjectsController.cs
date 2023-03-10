@@ -24,9 +24,9 @@ namespace Lagalt_Backend.Controllers
 
         // GET: api/Projects
         [HttpGet]
-        public async Task<IEnumerable<Project>> GetProject()
+        public async Task<ActionResult<IEnumerable<Project>>> GetProjects()
         {
-            return await _projectService.GetAllProjects();
+            return Ok(await _projectService.GetAllProjects());
         }
 
         // GET: api/Projects/5
@@ -76,7 +76,7 @@ namespace Lagalt_Backend.Controllers
         [HttpPost]
         public async Task<ActionResult<Project>> PostProject(Project project)
         {
-            return CreatedAtAction("GetProjects", new { id = project.Id }, await _projectService.AddProject(project));
+            return CreatedAtAction("GetProject", new { id = project.Id }, await _projectService.AddProject(project));
         }
 
         // DELETE: api/Projects/5

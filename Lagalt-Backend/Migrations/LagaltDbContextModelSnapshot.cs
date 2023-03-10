@@ -36,6 +36,13 @@ namespace Lagalt_Backend.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ProjectDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("ProjectIsAvailable")
+                        .HasColumnType("bit");
+
                     b.Property<string>("ProjectName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -50,14 +57,18 @@ namespace Lagalt_Backend.Migrations
                             Id = 1,
                             ProjectCategoryId = 1,
                             ProjectCategoryName = "Games",
-                            ProjectName = "My New Game"
+                            ProjectDescription = "World-Class MMORPG",
+                            ProjectIsAvailable = true,
+                            ProjectName = "Final Fantasy XIV"
                         },
                         new
                         {
                             Id = 2,
                             ProjectCategoryId = 2,
                             ProjectCategoryName = "Music",
-                            ProjectName = "My Awesome Song"
+                            ProjectDescription = "Rock song doubling as a boss theme",
+                            ProjectIsAvailable = false,
+                            ProjectName = "Scream"
                         });
                 });
 
@@ -91,7 +102,7 @@ namespace Lagalt_Backend.Migrations
                         {
                             Id = 2,
                             Hidden = false,
-                            UserName = "Davis"
+                            UserName = "Alice"
                         });
                 });
 #pragma warning restore 612, 618
