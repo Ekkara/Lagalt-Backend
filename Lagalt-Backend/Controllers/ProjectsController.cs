@@ -49,7 +49,7 @@ namespace Lagalt_Backend.Controllers
         // PUT: api/Projects/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutProject(int id, Project project)
+        public async Task<ActionResult> PutProject(int id, Project project)
         {
             if (id != project.Id)
             {
@@ -68,7 +68,7 @@ namespace Lagalt_Backend.Controllers
                 });
             }
 
-            return NoContent();
+            return Ok();
         }
 
         // POST: api/Projects
@@ -81,7 +81,7 @@ namespace Lagalt_Backend.Controllers
 
         // DELETE: api/Projects/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProject(int id)
+        public async Task<ActionResult> DeleteProject(int id)
         {
             try
             {

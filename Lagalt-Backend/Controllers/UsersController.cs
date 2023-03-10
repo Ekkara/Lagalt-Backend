@@ -50,7 +50,7 @@ namespace Lagalt_Backend.Controllers
         // PUT: api/Users/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(int id, User user)
+        public async Task<ActionResult> PutUser(int id, User user)
         {
             if (id != user.Id)
             {
@@ -82,7 +82,7 @@ namespace Lagalt_Backend.Controllers
 
         // DELETE: api/Users/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(int id)
+        public async Task<ActionResult> DeleteUser(int id)
         {
             try
             {
