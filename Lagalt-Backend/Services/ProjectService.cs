@@ -33,8 +33,8 @@ namespace Lagalt_Backend.Services
 
         public async Task<Project> UpdateProject(Project project)
         {
-            var searchedProject = await _context.Projects.FindAsync(project.Id);
-            if (searchedProject == null)
+            _context.Entry(project).State = EntityState.Modified;
+            if (project == null)
             {
                 throw new ProjectNotFoundException(project.Id);
             }
