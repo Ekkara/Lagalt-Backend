@@ -33,8 +33,8 @@ namespace Lagalt_Backend.Services
 
         public async Task<User> UpdateUser(User user)
         {
-            var searchedUser = await _context.Users.FindAsync(user.Id);
-            if (searchedUser == null)
+            _context.Entry(user).State = EntityState.Modified;
+            if (user == null)
             {
                 throw new UserNotFoundException(user.Id);
             }
