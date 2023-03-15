@@ -1,4 +1,4 @@
-﻿using Lagalt_Backend.Models;
+﻿using Lagalt_Backend.Models.Main;
 
 namespace Lagalt_Backend.Services
 {
