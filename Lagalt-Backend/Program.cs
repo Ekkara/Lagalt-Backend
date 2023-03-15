@@ -1,7 +1,6 @@
 ﻿using Lagalt_Backend.Models;
 using Lagalt_Backend.Services;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,11 +22,6 @@ builder.Services.AddCors(cors =>
 {
     cors.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 });
-
-// Added to keep JSON serialization as our default serialization method
-builder.Services.AddControllersWithViews().AddNewtonsoftJson(options =>
-    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore).AddNewtonsoftJson(options =>
-    options.SerializerSettings.ContractResolver = new DefaultContractResolver());
 
 var app = builder.Build();
 
