@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Lagalt_Backend.Models;
 using Lagalt_Backend.Services;
 using Lagalt_Backend.Exceptions;
+using Lagalt_Backend.Models.DTO.Project;
+using AutoMapper;
 
 namespace Lagalt_Backend.Controllers
 {
@@ -16,10 +18,14 @@ namespace Lagalt_Backend.Controllers
     public class ProjectsController : ControllerBase
     {
         private readonly IProjectService _projectService;
+        private readonly IMapper _mapper;
+        private readonly LagaltDbContext _context;
 
-        public ProjectsController(IProjectService projectService)
+        public ProjectsController(IProjectService projectService, IMapper mapper, LagaltDbContext context)
         {
             _projectService = projectService;
+            _mapper = mapper;
+            _context = context;
         }
 
         // GET: api/Projects
@@ -29,13 +35,21 @@ namespace Lagalt_Backend.Controllers
             return Ok(await _projectService.GetAllProjects());
         }
 
+        [HttpGet("ProjectsForMainPage")]
+        public async Task<ActionResult<IEnumerable<GetProjectForMainDTO>>> GetMainProjects() {
+            var projects = await _context.Projects.ToListAsync();
+            var projectDtos = _mapper.Map<List<GetProjectForMainDTO>>(projects);
+            return Ok(projectDtos);
+        }
+
         // GET: api/Projects/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Project>> GetProject(int id)
+        public async Task<ActionResult<GetProjectDetails>> GetProject(int id)
         {
             try
             {
-                return await _projectService.GetProjectById(id);
+                var project = await _projectService.GetProjectById(id);
+                return Ok(_mapper.Map<GetProjectDetails>(project));
             }
             catch (ProjectNotFoundException ex)
             {
@@ -74,8 +88,9 @@ namespace Lagalt_Backend.Controllers
         // POST: api/Projects
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Project>> PostProject(Project project)
+        public async Task<ActionResult<Project>> PostProject(CreateProjectDTO projectDTO)
         {
+            Project project = _mapper.Map<Project>(projectDTO);
             return CreatedAtAction("GetProject", new { id = project.Id }, await _projectService.AddProject(project));
         }
 

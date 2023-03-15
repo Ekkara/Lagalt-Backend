@@ -20,8 +20,8 @@ namespace Lagalt_Backend.Models
                 );
 
             modelBuilder.Entity<Project>().HasData(
-                new Project { Id = 1, ProjectName = "Final Fantasy XIV", ProjectDescription = "World-Class MMORPG", ProjectCategoryId = 1, ProjectCategoryName = "Games", ProjectIsAvailable = true },
-                new Project { Id = 2, ProjectName = "Scream", ProjectDescription = "Rock song doubling as a boss theme", ProjectCategoryId = 2, ProjectCategoryName = "Music", ProjectIsAvailable = false }
+                new Project { Id = 1, ProjectName = "Final Fantasy XIV", Description = "World-Class MMORPG", CategoryName = "Games", IsAvailable = true },
+                new Project { Id = 2, ProjectName = "Scream", Description = "Rock song doubling as a boss theme", CategoryName = "Music", IsAvailable = false }
                 );
         }
 

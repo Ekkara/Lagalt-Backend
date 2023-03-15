@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\MNiazi.CORP\\Documents\\GitHub\\Lagalt-Backend\\Lagalt-Backend\\Lagalt-Backend.csproj": {}
+    "C:\\Users\\EGus01\\Documents\\GitHub\\Lagalt-Backend\\Lagalt-Backend\\Lagalt-Backend.csproj": {}
   },
   "projects": {
-    "C:\\Users\\MNiazi.CORP\\Documents\\GitHub\\Lagalt-Backend\\Lagalt-Backend\\Lagalt-Backend.csproj": {
+    "C:\\Users\\EGus01\\Documents\\GitHub\\Lagalt-Backend\\Lagalt-Backend\\Lagalt-Backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\MNiazi.CORP\\Documents\\GitHub\\Lagalt-Backend\\Lagalt-Backend\\Lagalt-Backend.csproj",
+        "projectUniqueName": "C:\\Users\\EGus01\\Documents\\GitHub\\Lagalt-Backend\\Lagalt-Backend\\Lagalt-Backend.csproj",
         "projectName": "Lagalt-Backend",
-        "projectPath": "C:\\Users\\MNiazi.CORP\\Documents\\GitHub\\Lagalt-Backend\\Lagalt-Backend\\Lagalt-Backend.csproj",
-        "packagesPath": "C:\\Users\\MNiazi.CORP\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\MNiazi.CORP\\Documents\\GitHub\\Lagalt-Backend\\Lagalt-Backend\\obj\\",
+        "projectPath": "C:\\Users\\EGus01\\Documents\\GitHub\\Lagalt-Backend\\Lagalt-Backend\\Lagalt-Backend.csproj",
+        "packagesPath": "C:\\Users\\EGus01\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\EGus01\\Documents\\GitHub\\Lagalt-Backend\\Lagalt-Backend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\MNiazi.CORP\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\EGus01\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -40,6 +40,14 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
+            "AutoMapper": {
+              "target": "Package",
+              "version": "[12.0.1, )"
+            },
+            "AutoMapper.Extensions.Microsoft.DependencyInjection": {
+              "target": "Package",
+              "version": "[12.0.0, )"
+            },
             "Microsoft.AspNetCore.Mvc.Cors": {
               "target": "Package",
               "version": "[2.2.0, )"

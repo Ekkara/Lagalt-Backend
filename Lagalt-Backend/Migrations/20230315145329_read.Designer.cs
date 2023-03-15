@@ -3,6 +3,7 @@ using Lagalt_Backend.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Lagalt_Backend.Migrations
 {
     [DbContext(typeof(LagaltDbContext))]
-    partial class LagaltDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230315145329_read")]
+    partial class read
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,28 +32,19 @@ namespace Lagalt_Backend.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("CategoryName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DummyData1")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DummyData2")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DummyData3")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsAvailable")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("OwnerId")
+                    b.Property<int>("ProjectCategoryId")
                         .HasColumnType("int");
+
+                    b.Property<string>("ProjectCategoryName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProjectDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("ProjectIsAvailable")
+                        .HasColumnType("bit");
 
                     b.Property<string>("ProjectName")
                         .IsRequired()
@@ -64,19 +58,19 @@ namespace Lagalt_Backend.Migrations
                         new
                         {
                             Id = 1,
-                            CategoryName = "Games",
-                            Description = "World-Class MMORPG",
-                            IsAvailable = true,
-                            OwnerId = 0,
+                            ProjectCategoryId = 1,
+                            ProjectCategoryName = "Games",
+                            ProjectDescription = "World-Class MMORPG",
+                            ProjectIsAvailable = true,
                             ProjectName = "Final Fantasy XIV"
                         },
                         new
                         {
                             Id = 2,
-                            CategoryName = "Music",
-                            Description = "Rock song doubling as a boss theme",
-                            IsAvailable = false,
-                            OwnerId = 0,
+                            ProjectCategoryId = 2,
+                            ProjectCategoryName = "Music",
+                            ProjectDescription = "Rock song doubling as a boss theme",
+                            ProjectIsAvailable = false,
                             ProjectName = "Scream"
                         });
                 });

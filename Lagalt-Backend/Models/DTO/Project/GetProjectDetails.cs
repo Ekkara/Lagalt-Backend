@@ -1,8 +1,7 @@
-﻿using System.Collections.ObjectModel;
-
-namespace Lagalt_Backend.Models
+﻿
+namespace Lagalt_Backend.Models.DTO.Project
 {
-    public class Project
+    public class GetProjectDetails
     {
         public int Id { get; set; }
         public int OwnerId { get; set; }
@@ -10,11 +9,5 @@ namespace Lagalt_Backend.Models
         public string Description { get; set; }
         public string CategoryName { get; set; }
         public bool IsAvailable { get; set; }
-
-
-        
-        public string? DummyData1 { get; set; }
-        public string? DummyData2 { get; set; }
-        public string? DummyData3 { get; set; }
     }
 }
