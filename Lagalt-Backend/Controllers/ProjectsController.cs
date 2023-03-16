@@ -63,12 +63,17 @@ namespace Lagalt_Backend.Controllers
         // PUT: api/Projects/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<ActionResult> PutProject(int id, Project project)
+        public async Task<ActionResult> PutProject(int id, EditProjectDTO projectDTO)
         {
+            var project = await _projectService.GetProjectById(id);
             if (id != project.Id)
             {
                 return BadRequest();
             }
+            project.ProjectName = projectDTO.ProjectName;
+            project.Description= projectDTO.Description;
+            project.CategoryName = projectDTO.CategoryName;
+            project.IsAvailable = projectDTO.IsAvailable;
 
             try
             {
