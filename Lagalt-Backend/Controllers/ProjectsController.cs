@@ -10,6 +10,7 @@ using Lagalt_Backend.Services;
 using Lagalt_Backend.Exceptions;
 using Lagalt_Backend.Models.DTO.Project;
 using AutoMapper;
+using Lagalt_Backend.Models.DTO.ProjectApplication;
 
 namespace Lagalt_Backend.Controllers
 {
@@ -30,8 +31,14 @@ namespace Lagalt_Backend.Controllers
 
         // GET: api/Projects
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Project>>> GetProjects()
+        public async Task<ActionResult<IEnumerable<ReadProjectAdminInfoDTO>>> GetProjects()
         {
+            var projects = _mapper.Map<List<ReadProjectAdminInfoDTO>>(await _context.Projects.Include(p => p.Applications).ToListAsync());
+
+            //foreach (var project in projects) {
+            //    project.Applications = _mapper.Map<List<ReadProjectApplicationDTO>>(project.Applications);
+            //}
+            return Ok(projects);
             return Ok(await _projectService.GetAllProjects());
         }
 
@@ -89,6 +96,41 @@ namespace Lagalt_Backend.Controllers
 
             return Ok();
         }
+        [HttpPut("{projectId}/AddProjectApplication")]
+        public async Task<ActionResult> AddProjectApplication(int projectId, CreateProjectApplicationDTO applicationDTO) {
+            var project = await _projectService.GetProjectById(projectId);
+            if (projectId != project.Id) {
+                return BadRequest();
+            }
+            ProjectApplication application = _mapper.Map<ProjectApplication>(applicationDTO);
+            //application.ProjectId = projectId;
+            application.Project = project;
+            project.Applications.Add(application);
+
+            try {
+                _context.ProjectApplications.Update(application);
+                await _context.SaveChangesAsync();
+                await _projectService.UpdateProject(project);
+            } catch (ProjectNotFoundException ex) {
+                return NotFound(new ProblemDetails {
+                    Detail = ex.Message,
+                });
+            }
+
+            return Ok();
+        }
+        [HttpGet("{id}/projectApplication")]
+        public async Task<ActionResult<ProjectApplication>> GetProjectApplication(int id) {
+            try {
+                var application = await _projectService.GetProjectApplicationById(id);
+                return Ok(application);
+            } catch (ProjectNotFoundException ex) {
+                return NotFound(new ProblemDetails {
+                    Detail = ex.Message,
+                });
+            }
+        }
+
 
         // POST: api/Projects
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754

@@ -12,7 +12,7 @@ namespace Lagalt_Backend.Models
         public bool IsAvailable { get; set; }
 
 
-        
+        public virtual List<ProjectApplication> Applications { get; set; } = new List<ProjectApplication>();
         public string? DummyData1 { get; set; }
         public string? DummyData2 { get; set; }
         public string? DummyData3 { get; set; }

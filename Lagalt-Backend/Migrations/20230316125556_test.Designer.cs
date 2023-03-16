@@ -3,6 +3,7 @@ using Lagalt_Backend.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Lagalt_Backend.Migrations
 {
     [DbContext(typeof(LagaltDbContext))]
-    partial class LagaltDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230316125556_test")]
+    partial class test
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -81,33 +84,6 @@ namespace Lagalt_Backend.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Lagalt_Backend.Models.ProjectApplication", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ApplicantId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Date")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Message")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ProjectId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProjectId");
-
-                    b.ToTable("ProjectApplications");
-                });
-
             modelBuilder.Entity("Lagalt_Backend.Models.User", b =>
                 {
                     b.Property<int>("Id")
@@ -140,22 +116,6 @@ namespace Lagalt_Backend.Migrations
                             Hidden = false,
                             UserName = "Alice"
                         });
-                });
-
-            modelBuilder.Entity("Lagalt_Backend.Models.ProjectApplication", b =>
-                {
-                    b.HasOne("Lagalt_Backend.Models.Project", "Project")
-                        .WithMany("Applications")
-                        .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Project");
-                });
-
-            modelBuilder.Entity("Lagalt_Backend.Models.Project", b =>
-                {
-                    b.Navigation("Applications");
                 });
 #pragma warning restore 612, 618
         }
