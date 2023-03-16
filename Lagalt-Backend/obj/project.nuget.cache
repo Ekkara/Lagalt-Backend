@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "sVgZB5ybP6kkpB2+Gu5ESX52dbJyTzhoRGSL1JK1B935oqPE4OiCclhVHKLEtgz6mHPE7McjwHXkRa2GNxc12w==",
+  "dgSpecHash": "yYv3waT8ON/j1si4LrGpHfrZaBDAHgBZvTcs428VK8+1waAOfp8Gi/SCtFfb3aQfrxjZpTc1YeKmTBqixPdSvg==",
   "success": true,
   "projectFilePath": "C:\\Users\\MNiazi.CORP\\Documents\\GitHub\\Lagalt-Backend\\Lagalt-Backend\\Lagalt-Backend.csproj",
   "expectedPackageFiles": [
@@ -87,6 +87,7 @@
     "C:\\Users\\MNiazi.CORP\\.nuget\\packages\\microsoft.netcore.targets\\1.1.3\\microsoft.netcore.targets.1.1.3.nupkg.sha512",
     "C:\\Users\\MNiazi.CORP\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",
     "C:\\Users\\MNiazi.CORP\\.nuget\\packages\\microsoft.sqlserver.server\\1.0.0\\microsoft.sqlserver.server.1.0.0.nupkg.sha512",
+    "C:\\Users\\MNiazi.CORP\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.17.0\\microsoft.visualstudio.azure.containers.tools.targets.1.17.0.nupkg.sha512",
     "C:\\Users\\MNiazi.CORP\\.nuget\\packages\\microsoft.visualstudio.debugger.contracts\\17.2.0\\microsoft.visualstudio.debugger.contracts.17.2.0.nupkg.sha512",
     "C:\\Users\\MNiazi.CORP\\.nuget\\packages\\microsoft.visualstudio.web.codegeneration\\6.0.12\\microsoft.visualstudio.web.codegeneration.6.0.12.nupkg.sha512",
     "C:\\Users\\MNiazi.CORP\\.nuget\\packages\\microsoft.visualstudio.web.codegeneration.core\\6.0.12\\microsoft.visualstudio.web.codegeneration.core.6.0.12.nupkg.sha512",

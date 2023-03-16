@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Lagalt_Backend.Migrations
 {
     [DbContext(typeof(LagaltDbContext))]
-    [Migration("20230316094350_InitDb")]
+    [Migration("20230316145138_InitDb")]
     partial class InitDb
     {
         /// <inheritdoc />
