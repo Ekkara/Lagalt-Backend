@@ -11,6 +11,7 @@ using Lagalt_Backend.Exceptions;
 using Lagalt_Backend.Models.DTO.Project;
 using AutoMapper;
 using Lagalt_Backend.Models.DTO.ProjectApplication;
+using Lagalt_Backend.Models.DTO.Message;
 
 namespace Lagalt_Backend.Controllers
 {
@@ -33,13 +34,20 @@ namespace Lagalt_Backend.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ReadProjectAdminInfoDTO>>> GetProjects()
         {
-            var projects = _mapper.Map<List<ReadProjectAdminInfoDTO>>(await _context.Projects.Include(p => p.Applications).ToListAsync());
+            var projects = _mapper.Map<List<ReadProjectAdminInfoDTO>>(await _context.Projects.Include(p => p.Applications).Include(p => p.Messages).ToListAsync());
 
-            //foreach (var project in projects) {
-            //    project.Applications = _mapper.Map<List<ReadProjectApplicationDTO>>(project.Applications);
-            //}
             return Ok(projects);
             return Ok(await _projectService.GetAllProjects());
+        }
+        [HttpGet("{id}/AdminProjectView")]
+        public async Task<ActionResult<ReadProjectAdminInfoDTO>> GetAdminProjectView(int id) {
+            try {
+                return Ok(_mapper.Map<ReadProjectAdminInfoDTO>(await _projectService.GetProjectInAdminViewById(id)));
+            } catch (ProjectNotFoundException ex) {
+                return NotFound(new ProblemDetails {
+                    Detail = ex.Message,
+                });
+            }
         }
 
         [HttpGet("ProjectsForMainPage")]
@@ -109,6 +117,36 @@ namespace Lagalt_Backend.Controllers
 
             try {
                 _context.ProjectApplications.Update(application);
+                await _context.SaveChangesAsync();
+                await _projectService.UpdateProject(project);
+            } catch (ProjectNotFoundException ex) {
+                return NotFound(new ProblemDetails {
+                    Detail = ex.Message,
+                });
+            }
+
+            return Ok();
+        }
+        [HttpPut("{projectId}/AddMessage")]
+        public async Task<ActionResult> AddMessage(int projectId, CreateMessageDTO messageDTO) {
+            var project = await _projectService.GetProjectById(projectId);
+            if (projectId != project.Id) {
+                return BadRequest();
+            }
+            Message message = _mapper.Map<Message>(messageDTO);
+            message.Project = project;
+
+            //find senders name
+            var sender = await _context.Users.FindAsync(message.SenderId);
+            if (sender == null) {
+                return BadRequest("sender is not a existing user");
+            }
+            message.SenderName = sender.UserName;
+
+            project.Messages.Add(message);
+
+            try {
+                _context.Messages.Update(message);
                 await _context.SaveChangesAsync();
                 await _projectService.UpdateProject(project);
             } catch (ProjectNotFoundException ex) {

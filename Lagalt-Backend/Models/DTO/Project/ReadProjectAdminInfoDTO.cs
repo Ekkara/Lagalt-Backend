@@ -1,4 +1,6 @@
-﻿using Lagalt_Backend.Models.DTO.ProjectApplication;
+﻿using Lagalt_Backend.Models.DTO.Message;
+using Lagalt_Backend.Models.DTO.ProjectApplication;
+using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 
 namespace Lagalt_Backend.Models.DTO.Project
 {
@@ -13,5 +15,6 @@ namespace Lagalt_Backend.Models.DTO.Project
 
 
         public virtual List<ReadProjectApplicationDTO> Applications { get; set; } = new List<ReadProjectApplicationDTO>();
+        public virtual List<ReadMessageDTO> Messages { get; set; } = new List<ReadMessageDTO>();
     }
 }
