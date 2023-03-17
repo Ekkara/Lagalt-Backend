@@ -4,6 +4,8 @@
     {
         public int Id { get; set; }
         public string UserName { get; set; }
-        public bool Hidden { get; set; }
+        public string PictureURL { get; set; } = "";
+        public string Description { get; set; } = "";
+        public bool IsProfileHiden { get; set; }
     }
 }

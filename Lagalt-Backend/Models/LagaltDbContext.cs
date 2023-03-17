@@ -37,8 +37,8 @@ namespace Lagalt_Backend.Models
                 .HasForeignKey(od => od.ProjectId);
 
             modelBuilder.Entity<User>().HasData(
-                new User { Id = 1, UserName = "Maddie", Hidden = true },
-                new User { Id = 2, UserName = "Alice", Hidden = false }
+                new User { Id = 1, UserName = "Maddie", IsProfileHiden = true },
+                new User { Id = 2, UserName = "Alice", IsProfileHiden = false }
                 );
 
             modelBuilder.Entity<Project>().HasData(
