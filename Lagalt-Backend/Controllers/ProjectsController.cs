@@ -118,7 +118,7 @@ namespace Lagalt_Backend.Controllers
                 return BadRequest();
             }
 
-            //project.Members.Add(user);
+            project.Members.Add(user);
 
             try {
                 await _projectService.UpdateProject(project);
@@ -142,11 +142,11 @@ namespace Lagalt_Backend.Controllers
                 return BadRequest("User does not exist!");
             }
 
-            //if (!project.Members.Any(member => member.Id == userId)) {
-            //    return BadRequest("user was not in the project");
-            //}
+            if (!project.Members.Any(member => member.Id == userId)) {
+                return BadRequest("user was not in the project");
+            }
 
-            //project.Members.Remove(user);
+            project.Members.Remove(user);
 
             try {
                 await _projectService.UpdateProject(project);
@@ -228,7 +228,13 @@ namespace Lagalt_Backend.Controllers
         [HttpPost]
         public async Task<ActionResult<Project>> PostProject(CreateProjectDTO projectDTO)
         {
+            var user = await _userService.GetUserById(projectDTO.OwnerId);
+            if(user == null || projectDTO.OwnerId != user.Id) {
+            return NotFound("User to set as the owner is not found");
+            }
+
             Project project = _mapper.Map<Project>(projectDTO);
+            project.Members.Add(user);
             return CreatedAtAction("GetProject", new { id = project.Id }, await _projectService.AddProject(project));
         }
 

@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Text.Json.Serialization;
 
 namespace Lagalt_Backend.Models
 {
@@ -14,7 +15,8 @@ namespace Lagalt_Backend.Models
 
         public string RepositoryLink { get; set; } = "";
 
-        //public virtual List<User> Members { get; set; } = new List<User>();
+        [JsonIgnore]
+        public virtual List<User> Members { get; set; } = new List<User>();
         public virtual List<ProjectApplication> Applications { get; set; } = new List<ProjectApplication>();
         public virtual List<Message> Messages { get; set; } = new List<Message>();
     }

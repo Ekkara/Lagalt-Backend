@@ -1,4 +1,6 @@
-﻿namespace Lagalt_Backend.Models
+﻿using System.Text.Json.Serialization;
+
+namespace Lagalt_Backend.Models
 {
     public class User
     {
@@ -7,6 +9,8 @@
         public string PictureURL { get; set; } = "";
         public string Description { get; set; } = "";
         public bool IsProfileHiden { get; set; }
-        //public List<Project> Projects { get; set; } = new List<Project>();
+
+        [JsonIgnore]
+        public List<Project> Projects { get; set; } = new List<Project>();
     }
 }

@@ -39,13 +39,13 @@ namespace Lagalt_Backend.Models
                 .WithMany(o => o.Messages)
                 .HasForeignKey(od => od.ProjectId);
 
-             /*modelBuilder.Entity<User>()
+             modelBuilder.Entity<User>()
                  .HasMany<Project>(user => user.Projects)
                  .WithMany(project => project.Members)
                  .UsingEntity<Dictionary<string, object>>(
                  "UserProject",
-                 u => u.HasOne<Project>().WithMany().HasForeignKey("Id"),
-                 s => s.HasOne<User>().WithMany().HasForeignKey("Id"),
+                 u => u.HasOne<Project>().WithMany().HasForeignKey("ProjectId"),
+                 s => s.HasOne<User>().WithMany().HasForeignKey("UserId"),
                 joinEntity =>
                 {
                     joinEntity.HasKey("UserId", "ProjectId");
@@ -53,12 +53,8 @@ namespace Lagalt_Backend.Models
 
                     joinEntity.Property<int>("UserId");
                     joinEntity.Property<int>("ProjectId");
+                });
 
-                    joinEntity.HasData(
-                        new { UserId = 1, ProjectId = 1 },
-                        new { UserId = 2, ProjectId = 2 }
-                    );
-                });*/
 
             modelBuilder.Entity<User>().HasData(
                 new User { Id = 1, UserName = "Maddie", IsProfileHiden = true },

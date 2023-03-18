@@ -23,7 +23,11 @@ namespace Lagalt_Backend.Services
             return await _context.Projects.ToListAsync();
         }
         public async Task<Project> GetProjectInAdminViewById(int id) {
-             var project = await _context.Projects.Include(p => p.Applications).Include(p => p.Messages).FirstOrDefaultAsync(p => p.Id == id);
+             var project = await _context.Projects
+                .Include(p => p.Applications)
+                .Include(p => p.Messages)
+                .Include(p => p.Members)
+                .FirstOrDefaultAsync(p => p.Id == id);
             return project;
         }
 
