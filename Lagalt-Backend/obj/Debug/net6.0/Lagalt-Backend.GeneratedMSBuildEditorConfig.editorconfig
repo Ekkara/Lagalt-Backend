@@ -9,33 +9,9 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = Lagalt_Backend
 build_property.RootNamespace = Lagalt_Backend
-build_property.ProjectDir = C:\Users\MNiazi.CORP\Documents\GitHub\Lagalt-Backend\Lagalt-Backend\
+build_property.ProjectDir = C:\Users\EGus01\Documents\GitHub\Lagalt-Backend\Lagalt-Backend\
 build_property.RazorLangVersion = 6.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\MNiazi.CORP\Documents\GitHub\Lagalt-Backend\Lagalt-Backend
+build_property.MSBuildProjectDirectory = C:\Users\EGus01\Documents\GitHub\Lagalt-Backend\Lagalt-Backend
 build_property._RazorSourceGeneratorDebug = 
-
-[C:/Users/MNiazi.CORP/Documents/GitHub/Lagalt-Backend/Lagalt-Backend/Views/Shared/_ValidationScriptsPartial.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/MNiazi.CORP/Documents/GitHub/Lagalt-Backend/Lagalt-Backend/Views/Users/Create.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlcnNcQ3JlYXRlLmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/MNiazi.CORP/Documents/GitHub/Lagalt-Backend/Lagalt-Backend/Views/Users/Delete.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlcnNcRGVsZXRlLmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/MNiazi.CORP/Documents/GitHub/Lagalt-Backend/Lagalt-Backend/Views/Users/Details.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlcnNcRGV0YWlscy5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/MNiazi.CORP/Documents/GitHub/Lagalt-Backend/Lagalt-Backend/Views/Users/Edit.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlcnNcRWRpdC5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/MNiazi.CORP/Documents/GitHub/Lagalt-Backend/Lagalt-Backend/Views/Users/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlcnNcSW5kZXguY3NodG1s
-build_metadata.AdditionalFiles.CssScope = 

@@ -1,6 +1,6 @@
 ﻿using Lagalt_Backend.Exceptions;
 using Lagalt_Backend.Models;
-using Lagalt_Backend.Models.Main;
+using Lagalt_Backend.Models.DTO.Project;
 using Microsoft.EntityFrameworkCore;
 
 namespace Lagalt_Backend.Services
@@ -16,12 +16,23 @@ namespace Lagalt_Backend.Services
 
         public async Task<IEnumerable<Project>> GetAllProjects()
         {
+           
+
+            //await _context.Projects.Include(p => p.Applications)
+            //                          .FirstOrDefaultAsync(p => p.Id == id);
             return await _context.Projects.ToListAsync();
+        }
+        public async Task<Project> GetProjectInAdminViewById(int id) {
+             var project = await _context.Projects.Include(p => p.Applications).Include(p => p.Messages).FirstOrDefaultAsync(p => p.Id == id);
+            return project;
         }
 
         public async Task<Project> GetProjectById(int id)
         {
+           // var application = await _context.ProjectApplications.ToListAsync();
             var project = await _context.Projects.FindAsync(id);
+            
+            
 
             if (project == null)
             {
@@ -29,6 +40,15 @@ namespace Lagalt_Backend.Services
             }
 
             return project;
+        }
+        public async Task<ProjectApplication> GetProjectApplicationById(int id) {
+            var application = await _context.ProjectApplications.FindAsync(id);
+
+            if (application == null) {
+                throw new ProjectNotFoundException(id);
+            }
+
+            return application;
         }
 
         public async Task<Project> UpdateProject(Project project)

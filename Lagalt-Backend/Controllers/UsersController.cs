@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Lagalt_Backend.Models.Main;
+using Lagalt_Backend.Models;
 using Lagalt_Backend.Services;
 using Lagalt_Backend.Exceptions;
 using System.Net;

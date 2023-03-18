@@ -1,6 +1,5 @@
 ﻿using Lagalt_Backend.Exceptions;
 using Lagalt_Backend.Models;
-using Lagalt_Backend.Models.Main;
 using Microsoft.EntityFrameworkCore;
 
 namespace Lagalt_Backend.Services
