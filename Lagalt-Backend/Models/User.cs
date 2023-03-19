@@ -12,5 +12,6 @@ namespace Lagalt_Backend.Models
 
         [JsonIgnore]
         public List<Project> Projects { get; set; } = new List<Project>();
+        public List<Skill> Skills { get; set; } = new List<Skill>();
     }
 }

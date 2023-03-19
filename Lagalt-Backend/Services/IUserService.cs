@@ -6,6 +6,7 @@ namespace Lagalt_Backend.Services
     {
         Task<IEnumerable<User>> GetAllUsers();
         Task<User> GetUserById(int id);
+        Task RemoveSkillIfLast(string skill);
         Task<User> UpdateUser(User user);
         Task<User> AddUser(User user);
         Task DeleteUser(int id);

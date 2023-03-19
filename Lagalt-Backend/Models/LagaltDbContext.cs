@@ -10,6 +10,7 @@ namespace Lagalt_Backend.Models
 
         public DbSet<ProjectApplication> ProjectApplications { get; set; }
         public DbSet<Message> Messages { get; set; }
+        public DbSet<Skill> Skills { get; set; }
 
         public LagaltDbContext(DbContextOptions options) : base(options) {
 
@@ -54,6 +55,9 @@ namespace Lagalt_Backend.Models
                     joinEntity.Property<int>("UserId");
                     joinEntity.Property<int>("ProjectId");
                 });
+
+            modelBuilder.Entity<Skill>()
+                .HasKey(od => od.Id);
 
 
             modelBuilder.Entity<User>().HasData(
