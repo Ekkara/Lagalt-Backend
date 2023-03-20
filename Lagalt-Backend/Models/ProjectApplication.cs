@@ -6,8 +6,9 @@
         public int ProjectId { get; set; }
         public virtual Project Project { get; set; }
         public int ApplicantId { get; set; }
+        public string? ApplicantName { get; set; }
         public string? Message { get; set; }
         public string? Date { get; set; }
-        public string? Status { get; set; }
+        public string Status { get; set; } = "Pending";
     }
 }

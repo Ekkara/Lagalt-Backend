@@ -41,6 +41,16 @@ namespace Lagalt_Backend.Controllers
             return Ok(projects);
             return Ok(await _projectService.GetAllProjects());
         }
+        [HttpGet("{id}/ProjectExist")]
+        public async Task<ActionResult<bool>> ReadIfProjectExist(int id) {
+            try {
+                return Ok(await _context.Projects.AnyAsync(project => project.Id == id));
+            } catch (ProjectNotFoundException ex) {
+                return NotFound(new ProblemDetails {
+                    Detail = ex.Message,
+                });
+            }
+        }
         [HttpGet("{id}/AdminProjectView")]
         public async Task<ActionResult<ReadProjectAdminInfoDTO>> GetAdminProjectView(int id) {
             try {
@@ -163,10 +173,46 @@ namespace Lagalt_Backend.Controllers
             if (projectId != project.Id) {
                 return BadRequest();
             }
+
+            var sender = await _userService.GetUserById(applicationDTO.ApplicantId);
+            if(sender == null || sender.Id != applicationDTO.ApplicantId) {
+                return BadRequest();
+            }
+
+
             ProjectApplication application = _mapper.Map<ProjectApplication>(applicationDTO);
             //application.ProjectId = projectId;
             application.Project = project;
+            application.ApplicantName = sender.UserName;
             project.Applications.Add(application);
+
+            try {
+                _context.ProjectApplications.Update(application);
+                await _context.SaveChangesAsync();
+                await _projectService.UpdateProject(project);
+            } catch (ProjectNotFoundException ex) {
+                return NotFound(new ProblemDetails {
+                    Detail = ex.Message,
+                });
+            }
+
+            return Ok();
+        }
+        [HttpPut("{projectId}/RemoveProjectApplicationFromProject")]
+        public async Task<ActionResult> RemoveProjectApplicationFromProject(int applicationId) {
+            var application = await _context.ProjectApplications.FindAsync(applicationId);
+            if (application == null || application.ApplicantId != applicationId) {
+                return BadRequest();
+            }
+
+
+            var project = await _projectService.GetProjectById(application.ProjectId);
+            if (project == null || project.Id != application.ProjectId) {
+                return BadRequest();
+            }
+            
+            application.Status = "Denied";
+            project.Applications.Remove(application);
 
             try {
                 _context.ProjectApplications.Update(application);
