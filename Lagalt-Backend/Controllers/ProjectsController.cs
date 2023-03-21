@@ -101,6 +101,7 @@ namespace Lagalt_Backend.Controllers
             project.Description= projectDTO.Description;
             project.CategoryName = projectDTO.CategoryName;
             project.IsAvailable = projectDTO.IsAvailable;
+            project.RepositoryLink = projectDTO.RepositoryLink;
 
             try
             {
@@ -167,6 +168,7 @@ namespace Lagalt_Backend.Controllers
             }
             return Ok();
         }
+
         [HttpPut("{projectId}/AddProjectApplication")]
         public async Task<ActionResult> AddProjectApplication(int projectId, CreateProjectApplicationDTO applicationDTO) {
             var project = await _projectService.GetProjectById(projectId);
@@ -178,7 +180,6 @@ namespace Lagalt_Backend.Controllers
             if(sender == null || sender.Id != applicationDTO.ApplicantId) {
                 return BadRequest();
             }
-
 
             ProjectApplication application = _mapper.Map<ProjectApplication>(applicationDTO);
             //application.ProjectId = projectId;
@@ -195,13 +196,13 @@ namespace Lagalt_Backend.Controllers
                     Detail = ex.Message,
                 });
             }
-
             return Ok();
         }
-        [HttpPut("{projectId}/RemoveProjectApplicationFromProject")]
+        [HttpPut("{applicationId}/RemoveProjectApplicationFromProject")]
         public async Task<ActionResult> RemoveProjectApplicationFromProject(int applicationId) {
-            var application = await _context.ProjectApplications.FindAsync(applicationId);
-            if (application == null || application.ApplicantId != applicationId) {
+            var application = await _context.ProjectApplications.FirstOrDefaultAsync();// .FindAsync(applicationId);
+           
+            if (application == null || application.Id != applicationId) {
                 return BadRequest();
             }
 
@@ -218,6 +219,26 @@ namespace Lagalt_Backend.Controllers
                 _context.ProjectApplications.Update(application);
                 await _context.SaveChangesAsync();
                 await _projectService.UpdateProject(project);
+            } catch (ProjectNotFoundException ex) {
+                return NotFound(new ProblemDetails {
+                    Detail = ex.Message,
+                });
+            }
+
+            return Ok();
+        }
+        [HttpPut("{applicationId}/AcceptProjectApplication")]
+        public async Task<ActionResult> AcceptProjectApplication(int applicationId) {
+            var application = await _context.ProjectApplications.FindAsync(applicationId);
+
+            if (application == null || application.Id != applicationId) {
+                return BadRequest();
+            }
+
+            try {
+                await AddMemberToProject(application.ProjectId, application.ApplicantId);
+                _context.ProjectApplications.Remove(application);
+                await _context.SaveChangesAsync();
             } catch (ProjectNotFoundException ex) {
                 return NotFound(new ProblemDetails {
                     Detail = ex.Message,
@@ -267,7 +288,6 @@ namespace Lagalt_Backend.Controllers
                 });
             }
         }
-
 
         // POST: api/Projects
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
