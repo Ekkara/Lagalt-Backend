@@ -39,7 +39,6 @@ namespace Lagalt_Backend.Controllers
             var projects = _mapper.Map<List<ReadProjectAdminInfoDTO>>(await _context.Projects.Include(p => p.Applications).Include(p => p.Messages).ToListAsync());
 
             return Ok(projects);
-            return Ok(await _projectService.GetAllProjects());
         }
         [HttpGet("{id}/ProjectExist")]
         public async Task<ActionResult<bool>> ReadIfProjectExist(int id) {
@@ -55,6 +54,26 @@ namespace Lagalt_Backend.Controllers
         public async Task<ActionResult<ReadProjectAdminInfoDTO>> GetAdminProjectView(int id) {
             try {
                 return Ok(_mapper.Map<ReadProjectAdminInfoDTO>(await _projectService.GetProjectInAdminViewById(id)));
+            } catch (ProjectNotFoundException ex) {
+                return NotFound(new ProblemDetails {
+                    Detail = ex.Message,
+                });
+            }
+        }
+        [HttpGet("{id}/CollaboratorProjectView")]
+        public async Task<ActionResult<ReadProjectCollaboratorInfoDTO>> GetCollaboratorProjectView(int id) {
+            try {
+                return Ok(_mapper.Map<ReadProjectCollaboratorInfoDTO>(await _projectService.GetProjectInCollaboratorViewById(id)));
+            } catch (ProjectNotFoundException ex) {
+                return NotFound(new ProblemDetails {
+                    Detail = ex.Message,
+                });
+            }
+        }
+        [HttpGet("{id}/NonCollaboratorProjectView")]
+        public async Task<ActionResult<ReadProjectNonCollaboratorInfoDTO>> NonCollaboratorProjectView(int id) {
+            try {
+                return Ok(_mapper.Map<ReadProjectNonCollaboratorInfoDTO>(await _projectService.GetProjectById(id)));
             } catch (ProjectNotFoundException ex) {
                 return NotFound(new ProblemDetails {
                     Detail = ex.Message,
@@ -185,6 +204,8 @@ namespace Lagalt_Backend.Controllers
             //application.ProjectId = projectId;
             application.Project = project;
             application.ApplicantName = sender.UserName;
+            application.Date = DateTime.Now.ToShortDateString();
+
             project.Applications.Add(application);
 
             try {

@@ -5,6 +5,7 @@ namespace Lagalt_Backend.Services
     public interface IProjectService
     {
         Task<IEnumerable<Project>> GetAllProjects();
+        Task<Project> GetProjectInCollaboratorViewById(int id);
         Task<Project> GetProjectInAdminViewById(int id);
         Task<Project> GetProjectById(int id);
         Task<ProjectApplication> GetProjectApplicationById(int id);

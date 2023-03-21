@@ -26,7 +26,8 @@ namespace Lagalt_Backend.Profiles
             CreateMap<Project, EditProjectDTO>()
                      .ReverseMap();
 
-
+            CreateMap<Project, ReadProjectNonCollaboratorInfoDTO>();
+            CreateMap<Project, ReadProjectCollaboratorInfoDTO>();
             CreateMap<Project, ReadProjectAdminInfoDTO>()
                      .ReverseMap();
         }

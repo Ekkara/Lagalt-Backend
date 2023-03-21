@@ -28,21 +28,30 @@ namespace Lagalt_Backend.Services
                 .Include(p => p.Messages)
                 .Include(p => p.Members)
                 .FirstOrDefaultAsync(p => p.Id == id);
+            if (project == null) {
+                throw new ProjectNotFoundException(id);
+            }
+            return project;
+        }
+        public async Task<Project> GetProjectInCollaboratorViewById(int id) {
+            var project = await _context.Projects
+               .Include(p => p.Messages)
+               .Include(p => p.Members)
+               .FirstOrDefaultAsync(p => p.Id == id);
+            if (project == null) {
+                throw new ProjectNotFoundException(id);
+            }
             return project;
         }
 
         public async Task<Project> GetProjectById(int id)
         {
-           // var application = await _context.ProjectApplications.ToListAsync();
-            var project = await _context.Projects.FindAsync(id);
-            
-            
-
-            if (project == null)
-            {
+            var project = await _context.Projects
+               .Include(p => p.Members)
+               .FirstOrDefaultAsync(p => p.Id == id);
+            if (project == null) {
                 throw new ProjectNotFoundException(id);
             }
-
             return project;
         }
         public async Task<ProjectApplication> GetProjectApplicationById(int id) {
