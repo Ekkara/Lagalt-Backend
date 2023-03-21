@@ -82,10 +82,9 @@ namespace Lagalt_Backend.Controllers
         }
 
         [HttpGet("ProjectsForMainPage")]
-        public async Task<ActionResult<IEnumerable<GetProjectForMainDTO>>> GetMainProjects() {
+        public async Task<ActionResult<IEnumerable<GetProjectForMainDTO>>> GetMainProjects(int start, int range) {
             var projects = await _context.Projects.ToListAsync();
-            var projectDtos = _mapper.Map<List<GetProjectForMainDTO>>(projects);
-            return Ok(projectDtos);
+            return Ok(_mapper.Map<List<GetProjectForMainDTO>>(projects).GetRange(start, range));
         }
 
         // GET: api/Projects/5
