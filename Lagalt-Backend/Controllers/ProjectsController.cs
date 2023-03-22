@@ -83,8 +83,25 @@ namespace Lagalt_Backend.Controllers
 
         [HttpGet("ProjectsForMainPage")]
         public async Task<ActionResult<IEnumerable<GetProjectForMainDTO>>> GetMainProjects(int start, int range) {
-            var projects = await _context.Projects.ToListAsync();
-            return Ok(_mapper.Map<List<GetProjectForMainDTO>>(projects).GetRange(start, range));
+            var projects = await _context.Projects
+                //.Where(project => searchCatagoryType.Contains(project.CategoryName))
+                .ToListAsync();
+
+            if (start < 0 || range < 0) {
+
+                return BadRequest("Invalid start or range values");
+            }
+            if(start >= projects.Count) {
+                return Ok();
+            }
+
+            int end = start + range - 1;
+
+            if (end >= projects.Count) {
+                end = projects.Count - 1;
+            }
+
+            return Ok(_mapper.Map<List<GetProjectForMainDTO>>(projects).GetRange(start, end - start + 1));
         }
 
         // GET: api/Projects/5

@@ -70,7 +70,6 @@ namespace Lagalt_Backend.Services
             {
                 throw new UserNotFoundException(user.Id);
             }
-
             await _context.SaveChangesAsync();
             return user;
         }
