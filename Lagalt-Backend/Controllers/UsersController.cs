@@ -9,6 +9,8 @@ using Lagalt_Backend.Models;
 using Lagalt_Backend.Services;
 using Lagalt_Backend.Exceptions;
 using System.Net;
+using Lagalt_Backend.Models.DTO.User;
+using AutoMapper;
 
 namespace Lagalt_Backend.Controllers
 {
@@ -18,10 +20,12 @@ namespace Lagalt_Backend.Controllers
     {
         private readonly IUserService _userService;
         private readonly LagaltDbContext _context;
+        private readonly IMapper _mapper;
 
-        public UsersController(IUserService userService, LagaltDbContext context) {
+        public UsersController(IMapper mapper, IUserService userService, LagaltDbContext context) {
             _userService = userService;
             _context = context;
+            _mapper = mapper;
         }
 
         // GET: api/Users
@@ -31,10 +35,29 @@ namespace Lagalt_Backend.Controllers
         }
 
         // GET: api/Users/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(int id) {
+        [HttpGet("{userId}")]
+        public async Task<ActionResult<ReadUserDTO>> GetUser(int userId, int viewerId) {
+            var user = await _userService.GetUserById(userId);
+            if(user == null || user.Id != userId) {
+            return BadRequest();
+            }
+
+            ReadUserDTO userDTO = _mapper.Map<ReadUserDTO>(user);
+            userDTO.DisplayingProfile = true;
+
+            if (user.IsProfileHiden) {
+                if (user.Id != viewerId) {
+                    var projectApplications = await _context.ProjectApplications.Where(pa => pa.Id == userId).ToListAsync();
+                    if (!projectApplications.Any(pa => pa.Project.OwnerId == viewerId)) {
+                        userDTO.Projects = new List<Models.DTO.Project.ReadProjectNameDTO>();
+                        userDTO.Skills = new List<Skill>();
+                        userDTO.Description = "This user's profile is set to be hidden";
+                        userDTO.DisplayingProfile = false;
+                    }
+                }
+            }
             try {
-                return await _userService.GetUserById(id);
+                return userDTO;
             } catch (UserNotFoundException ex) {
                 return NotFound(new ProblemDetails {
                     Detail = ex.Message,
@@ -124,7 +147,8 @@ namespace Lagalt_Backend.Controllers
         // POST: api/Users
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<User>> PostUser(User user) {
+        public async Task<ActionResult<User>> PostUser(CreateUserDTO userDTO) {
+            var user = _mapper.Map<User>(userDTO);
             return CreatedAtAction("GetUser", new { id = user.Id }, await _userService.AddUser(user));
         }
 

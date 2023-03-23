@@ -20,7 +20,14 @@ namespace Lagalt_Backend.Profiles
                     src.Description);
                 });
 
-                CreateMap<Project, GetProjectDetails>()
+            CreateMap<Project, ReadProjectNameDTO>()
+               .ForMember(dest => dest.Description, opt => {
+                   opt.MapFrom(src => src.Description.Length > MAX_DESC_LENGTH ?
+                   src.Description.Substring(0, MAX_DESC_LENGTH - 3).TrimEnd() + "..." :
+                   src.Description);
+               });
+
+            CreateMap<Project, GetProjectDetails>()
                        .ReverseMap();
 
             CreateMap<Project, EditProjectDTO>()

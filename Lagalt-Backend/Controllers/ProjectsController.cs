@@ -37,7 +37,6 @@ namespace Lagalt_Backend.Controllers
         public async Task<ActionResult<IEnumerable<ReadProjectAdminInfoDTO>>> GetProjects()
         {
             var projects = _mapper.Map<List<ReadProjectAdminInfoDTO>>(await _context.Projects.Include(p => p.Applications).Include(p => p.Messages).ToListAsync());
-
             return Ok(projects);
         }
         [HttpGet("{id}/ProjectExist")]
@@ -100,7 +99,6 @@ namespace Lagalt_Backend.Controllers
             if (end >= projects.Count) {
                 end = projects.Count - 1;
             }
-
             return Ok(_mapper.Map<List<GetProjectForMainDTO>>(projects).GetRange(start, end - start + 1));
         }
 
@@ -333,7 +331,7 @@ namespace Lagalt_Backend.Controllers
         {
             var user = await _userService.GetUserById(projectDTO.OwnerId);
             if(user == null || projectDTO.OwnerId != user.Id) {
-            return NotFound("User to set as the owner is not found");
+            return BadRequest("User to set as the owner is not found");
             }
 
             Project project = _mapper.Map<Project>(projectDTO);

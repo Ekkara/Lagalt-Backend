@@ -8,6 +8,10 @@ namespace Lagalt_Backend.Profiles
     {
         public UserProfile() { 
         CreateMap<User, ReadUserNamesDTO>();
+
+        CreateMap<User, ReadUserDTO>();
+
+            CreateMap<CreateUserDTO, User>();
         }
     }
 }

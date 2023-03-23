@@ -22,6 +22,7 @@ namespace Lagalt_Backend.Services
         {
             var user = await _context.Users
                 .Include(user => user.Skills)
+                .Include(user => user.Projects)
                 .Where(user => user.Id == id)
                 .FirstOrDefaultAsync();
             
