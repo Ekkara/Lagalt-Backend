@@ -61,8 +61,8 @@ namespace Lagalt_Backend.Models
 
 
             modelBuilder.Entity<User>().HasData(
-                new User { Id = 1, UserName = "Maddie", IsProfileHiden = true },
-                new User { Id = 2, UserName = "Alice", IsProfileHiden = false }
+                new User { Id = 1,KeycloakId = "20a04c91-29d4-4603-a640-e94908d22175", UserName = "Maddie", IsProfileHiden = true },
+                new User { Id = 2,KeycloakId= "04b29fd4-862e-452f-a48d-d987a68c0104", UserName = "Alice", IsProfileHiden = false }
                 );
 
             modelBuilder.Entity<Project>().HasData(

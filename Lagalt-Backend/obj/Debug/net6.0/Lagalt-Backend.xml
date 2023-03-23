@@ -1,0 +1,104 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Lagalt-Backend</name>
+    </assembly>
+    <members>
+        <member name="T:Lagalt_Backend.Migrations.restore">
+            <inheritdoc />
+        </member>
+        <member name="M:Lagalt_Backend.Migrations.restore.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Lagalt_Backend.Migrations.restore.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Lagalt_Backend.Migrations.restore.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:Lagalt_Backend.Migrations.messageRestored">
+            <inheritdoc />
+        </member>
+        <member name="M:Lagalt_Backend.Migrations.messageRestored.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Lagalt_Backend.Migrations.messageRestored.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Lagalt_Backend.Migrations.messageRestored.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:Lagalt_Backend.Migrations.projectAndUser">
+            <inheritdoc />
+        </member>
+        <member name="M:Lagalt_Backend.Migrations.projectAndUser.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Lagalt_Backend.Migrations.projectAndUser.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Lagalt_Backend.Migrations.projectAndUser.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:Lagalt_Backend.Migrations.skill">
+            <inheritdoc />
+        </member>
+        <member name="M:Lagalt_Backend.Migrations.skill.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Lagalt_Backend.Migrations.skill.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Lagalt_Backend.Migrations.skill.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:Lagalt_Backend.Migrations.removingskill">
+            <inheritdoc />
+        </member>
+        <member name="M:Lagalt_Backend.Migrations.removingskill.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Lagalt_Backend.Migrations.removingskill.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Lagalt_Backend.Migrations.removingskill.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:Lagalt_Backend.Migrations.readApplicant">
+            <inheritdoc />
+        </member>
+        <member name="M:Lagalt_Backend.Migrations.readApplicant.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Lagalt_Backend.Migrations.readApplicant.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Lagalt_Backend.Migrations.readApplicant.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:Lagalt_Backend.Migrations.readUser">
+            <inheritdoc />
+        </member>
+        <member name="M:Lagalt_Backend.Migrations.readUser.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Lagalt_Backend.Migrations.readUser.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Lagalt_Backend.Migrations.readUser.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:Lagalt_Backend.Migrations.InitUpdateKeycloak">
+            <inheritdoc />
+        </member>
+        <member name="M:Lagalt_Backend.Migrations.InitUpdateKeycloak.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Lagalt_Backend.Migrations.InitUpdateKeycloak.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Lagalt_Backend.Migrations.InitUpdateKeycloak.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+    </members>
+</doc>

@@ -10,12 +10,20 @@ using Lagalt_Backend.Services;
 using Lagalt_Backend.Exceptions;
 using System.Net;
 using Lagalt_Backend.Models.DTO.User;
+using Lagalt_Backend.Helpers;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using System.Net.Mime;
+using Lagalt_Backend.Helpers;
 
 namespace Lagalt_Backend.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
+    [Authorize]
+    [Produces(MediaTypeNames.Application.Json)]
+    [Consumes(MediaTypeNames.Application.Json)]
+    [ApiConventionType(typeof(DefaultApiConventions))]
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -33,6 +41,63 @@ namespace Lagalt_Backend.Controllers
         public async Task<ActionResult<IEnumerable<User>>> GetUsers() {
             return Ok(await _userService.GetAllUsers());
         }
+
+        [HttpGet("GetUserprofile")]
+        public async Task<ActionResult> GetUserProfile()
+        {
+            var keycloakId = User.GetId();
+            var username = User.GetUsername();
+
+            if (string.IsNullOrEmpty(keycloakId) || string.IsNullOrEmpty(username))
+            {
+                return BadRequest();
+            }
+
+            var user = await _userService.GetUserAsyncKeycloak(keycloakId, username);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var profileUrl = Url.Action("GetUser", "Users", new { id = user.Id }, Request.Scheme);
+            Response.Headers.Add("Location", profileUrl);
+            return StatusCode(303);
+        }
+
+        [HttpPut("{UpdateUserid}")]
+        public async Task<IActionResult> UpdateUser(int id, EditUserDto userInput)
+        {
+            var keycloakId = User.GetId();
+            if (string.IsNullOrEmpty(keycloakId))
+            {
+                return BadRequest("Invalid Keycloak ID.");
+            }
+
+            var userToPatch = _userService.GetUserFromKeyCloak(keycloakId);
+            if (userToPatch == null)
+            {
+                return NotFound("User not found.");
+            }
+
+            if (userToPatch.Id != id)
+            {
+                return BadRequest("User ID mismatch.");
+            }
+
+            var updatedUser = _mapper.Map<User>(userInput);
+            try
+            {
+                await _userService.UpdateUserAsyncPatch(updatedUser, userToPatch);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error updating user: {ex.Message}");
+            }
+
+            return Ok(userToPatch);
+        }
+
+
 
         // GET: api/Users/5
         [HttpGet("{userId}")]

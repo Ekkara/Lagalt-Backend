@@ -88,6 +88,19 @@
           }
         }
       },
+      "Keycloak.AspNetCore/1.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNetCore.Authentication.OpenIdConnect": "5.0.9",
+          "Newtonsoft.Json": "13.0.1"
+        },
+        "compile": {
+          "lib/net5.0/Keycloak.AspNetCore.dll": {}
+        },
+        "runtime": {
+          "lib/net5.0/Keycloak.AspNetCore.dll": {}
+        }
+      },
       "MessagePack/2.1.152": {
         "type": "package",
         "dependencies": {
@@ -161,6 +174,44 @@
             "related": ".xml"
           }
         }
+      },
+      "Microsoft.AspNetCore.Authentication.JwtBearer/6.0.14": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.IdentityModel.Protocols.OpenIdConnect": "6.10.0"
+        },
+        "compile": {
+          "lib/net6.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll": {
+            "related": ".xml"
+          }
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
+      },
+      "Microsoft.AspNetCore.Authentication.OpenIdConnect/5.0.9": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.IdentityModel.Protocols.OpenIdConnect": "6.7.1"
+        },
+        "compile": {
+          "lib/net5.0/Microsoft.AspNetCore.Authentication.OpenIdConnect.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net5.0/Microsoft.AspNetCore.Authentication.OpenIdConnect.dll": {
+            "related": ".xml"
+          }
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
       },
       "Microsoft.AspNetCore.Authorization/2.2.0": {
         "type": "package",
@@ -4294,6 +4345,18 @@
         "logo.png"
       ]
     },
+    "Keycloak.AspNetCore/1.0.0": {
+      "sha512": "6JLwHNzZFNYxvH/bgIyITJmq5YIuVA0fsCRzsgFG7Ny93gxhejVJuCEyrIdW3C1PPKrFN/XlHbeuAEg3M+cGLA==",
+      "type": "package",
+      "path": "keycloak.aspnetcore/1.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "keycloak.aspnetcore.1.0.0.nupkg.sha512",
+        "keycloak.aspnetcore.nuspec",
+        "lib/net5.0/Keycloak.AspNetCore.dll"
+      ]
+    },
     "MessagePack/2.1.152": {
       "sha512": "PlJ31qf42uGuJfwc61x/Pt4hJi01xh1rrBofj1MJSLzEot/2UAIRdSgxEHN/8qou5CV8OBeDM9HXKPi1Oj8rpQ==",
       "type": "package",
@@ -4364,6 +4427,36 @@
         "lib/netstandard2.0/Microsoft.AspNetCore.Authentication.Core.xml",
         "microsoft.aspnetcore.authentication.core.2.2.0.nupkg.sha512",
         "microsoft.aspnetcore.authentication.core.nuspec"
+      ]
+    },
+    "Microsoft.AspNetCore.Authentication.JwtBearer/6.0.14": {
+      "sha512": "/XKNv0tpAQrvDgAiz63Q5HWxV/84UmOGETD2XY9HVQXX1l5yjSqRVO+SV/ceN5WOuSDCnCyzV9GhIZX6f9KItg==",
+      "type": "package",
+      "path": "microsoft.aspnetcore.authentication.jwtbearer/6.0.14",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/net6.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll",
+        "lib/net6.0/Microsoft.AspNetCore.Authentication.JwtBearer.xml",
+        "microsoft.aspnetcore.authentication.jwtbearer.6.0.14.nupkg.sha512",
+        "microsoft.aspnetcore.authentication.jwtbearer.nuspec"
+      ]
+    },
+    "Microsoft.AspNetCore.Authentication.OpenIdConnect/5.0.9": {
+      "sha512": "uk9jUzsT6XSGdezUyyfrTv/dJLBvV68b5ZJiC6YM+aeOCvSI36z/j71sBuCu6wu+eE+HrSwY5CIO7hqJxCRomg==",
+      "type": "package",
+      "path": "microsoft.aspnetcore.authentication.openidconnect/5.0.9",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/net5.0/Microsoft.AspNetCore.Authentication.OpenIdConnect.dll",
+        "lib/net5.0/Microsoft.AspNetCore.Authentication.OpenIdConnect.xml",
+        "microsoft.aspnetcore.authentication.openidconnect.5.0.9.nupkg.sha512",
+        "microsoft.aspnetcore.authentication.openidconnect.nuspec"
       ]
     },
     "Microsoft.AspNetCore.Authorization/2.2.0": {
@@ -11459,6 +11552,8 @@
     "net6.0": [
       "AutoMapper >= 12.0.1",
       "AutoMapper.Extensions.Microsoft.DependencyInjection >= 12.0.0",
+      "Keycloak.AspNetCore >= 1.0.0",
+      "Microsoft.AspNetCore.Authentication.JwtBearer >= 6.0.14",
       "Microsoft.AspNetCore.Mvc.Cors >= 2.2.0",
       "Microsoft.EntityFrameworkCore >= 7.0.3",
       "Microsoft.EntityFrameworkCore.SqlServer >= 7.0.3",
@@ -11468,19 +11563,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\EGus01\\.nuget\\packages\\": {}
+    "C:\\Users\\TPham1\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\EGus01\\Documents\\GitHub\\Lagalt-Backend\\Lagalt-Backend\\Lagalt-Backend.csproj",
+      "projectUniqueName": "C:\\Users\\TPham1\\Desktop\\Lagalt-Backend\\Lagalt-Backend\\Lagalt-Backend.csproj",
       "projectName": "Lagalt-Backend",
-      "projectPath": "C:\\Users\\EGus01\\Documents\\GitHub\\Lagalt-Backend\\Lagalt-Backend\\Lagalt-Backend.csproj",
-      "packagesPath": "C:\\Users\\EGus01\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\EGus01\\Documents\\GitHub\\Lagalt-Backend\\Lagalt-Backend\\obj\\",
+      "projectPath": "C:\\Users\\TPham1\\Desktop\\Lagalt-Backend\\Lagalt-Backend\\Lagalt-Backend.csproj",
+      "packagesPath": "C:\\Users\\TPham1\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\TPham1\\Desktop\\Lagalt-Backend\\Lagalt-Backend\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "C:\\Users\\EGus01\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\TPham1\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -11488,6 +11588,7 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -11513,6 +11614,14 @@
           "AutoMapper.Extensions.Microsoft.DependencyInjection": {
             "target": "Package",
             "version": "[12.0.0, )"
+          },
+          "Keycloak.AspNetCore": {
+            "target": "Package",
+            "version": "[1.0.0, )"
+          },
+          "Microsoft.AspNetCore.Authentication.JwtBearer": {
+            "target": "Package",
+            "version": "[6.0.14, )"
           },
           "Microsoft.AspNetCore.Mvc.Cors": {
             "target": "Package",

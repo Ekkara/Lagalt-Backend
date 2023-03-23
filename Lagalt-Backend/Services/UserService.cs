@@ -94,5 +94,58 @@ namespace Lagalt_Backend.Services
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<User> GetUserAsyncKeycloak(string keycloakId, string username)
+        {
+            var user = await _context.Users.SingleOrDefaultAsync(u => u.KeycloakId == keycloakId);
+
+            if (user == null)
+            {
+                return await PostAsyncKeycloakUsername(keycloakId, username);
+            }
+            return user;
+        }
+
+        public async Task UpdateUserAsyncPatch(User updatedUser, User userToPatch)
+        {
+            if (updatedUser.UserName != null)
+            {
+                userToPatch.UserName = updatedUser.UserName;
+            }
+            if (updatedUser.IsProfileHiden != null)
+            {
+                userToPatch.IsProfileHiden = updatedUser.IsProfileHiden;
+            }
+            if (updatedUser.Description != null)
+            {
+                userToPatch.Description = updatedUser.Description;
+            }
+            if (updatedUser.PictureURL != null)
+            {
+                userToPatch.PictureURL = updatedUser.PictureURL;
+            }
+            _context.Entry(userToPatch).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<User> PostAsyncKeycloakUsername(string keycloakId, string username)
+        {
+            User user = new User { KeycloakId = keycloakId, UserName = username };
+
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+            return user;
+        }
+
+        public async Task<bool> UserInDbKeycloak(string keycloakId)
+        {
+            return await _context.Users.AnyAsync(c => c.KeycloakId == keycloakId);
+        }
+
+        public User GetUserFromKeyCloak(string keycloakId)
+        {
+            User user = _context.Users.FirstOrDefaultAsync(u => u.KeycloakId == keycloakId).Result;
+            return user;
+        }
     }
 }
