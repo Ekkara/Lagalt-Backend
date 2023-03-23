@@ -74,11 +74,11 @@ builder.Services.AddSwaggerGen(options =>
     {
         Version = "v1",
         Title = "Lagalt Network API",
-        Description = "Get information about users, posts, groups and events",
+        Description = "Get information about users, projects, message and projectApplication",
         Contact = new OpenApiContact
         {
             Name = "Github repo",
-            Url = new Uri("https://github.com/TintinPetersson/AlumniNetworkAPI"),
+            Url = new Uri("https://github.com/Ekkara/Lagalt-Backend.git"),
         }
     });
     options.IncludeXmlComments(xmlPath);
