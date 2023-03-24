@@ -876,3 +876,8 @@ C:\Users\TPham1\Desktop\Lagalt-Backend\Lagalt-Backend\obj\Debug\net6.0\Lagalt-Ba
 C:\Users\TPham1\Desktop\Lagalt-Backend\Lagalt-Backend\obj\Debug\net6.0\Lagalt-Backend.xml
 C:\Users\TPham1\Desktop\Lagalt-Backend\Lagalt-Backend\obj\Debug\net6.0\Lagalt-Backend.genruntimeconfig.cache
 C:\Users\TPham1\Desktop\Lagalt-Backend\Lagalt-Backend\obj\Debug\net6.0\ref\Lagalt-Backend.dll
+C:\Users\EGus01\Documents\GitHub\Lagalt-Backend\Lagalt-Backend\bin\Debug\net6.0\Lagalt-Backend.xml
+C:\Users\EGus01\Documents\GitHub\Lagalt-Backend\Lagalt-Backend\bin\Debug\net6.0\Keycloak.AspNetCore.dll
+C:\Users\EGus01\Documents\GitHub\Lagalt-Backend\Lagalt-Backend\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\EGus01\Documents\GitHub\Lagalt-Backend\Lagalt-Backend\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.OpenIdConnect.dll
+C:\Users\EGus01\Documents\GitHub\Lagalt-Backend\Lagalt-Backend\obj\Debug\net6.0\Lagalt-Backend.xml

@@ -12,6 +12,7 @@ using Lagalt_Backend.Models.DTO.Project;
 using AutoMapper;
 using Lagalt_Backend.Models.DTO.ProjectApplication;
 using Lagalt_Backend.Models.DTO.Message;
+using Lagalt_Backend.Helpers;
 
 namespace Lagalt_Backend.Controllers
 {
@@ -34,12 +35,12 @@ namespace Lagalt_Backend.Controllers
 
         // GET: api/Projects
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ReadProjectAdminInfoDTO>>> GetProjects()
+        public async Task<ActionResult<IEnumerable<ReadProjectAdminInfoDTO>>> GetProjects() //this is a not a necisary call! i can't see any use for getting all project as admin
         {
             var projects = _mapper.Map<List<ReadProjectAdminInfoDTO>>(await _context.Projects.Include(p => p.Applications).Include(p => p.Messages).ToListAsync());
             return Ok(projects);
         }
-        [HttpGet("{id}/ProjectExist")]
+        [HttpGet("{id}/ProjectExist")] // no keycloak needed
         public async Task<ActionResult<bool>> ReadIfProjectExist(int id) {
             try {
                 return Ok(await _context.Projects.AnyAsync(project => project.Id == id));
@@ -49,27 +50,75 @@ namespace Lagalt_Backend.Controllers
                 });
             }
         }
-        [HttpGet("{id}/AdminProjectView")]
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<int>>> GetUserRelationToProject(int projectId) {
+            var keycloakId = User.GetId();
+            var username = User.GetUsername();
+
+            if (string.IsNullOrEmpty(keycloakId) || string.IsNullOrEmpty(username)) {
+                return NotFound();
+            }
+            var user = await _userService.GetUserAsyncKeycloak(keycloakId, username);
+            if (user == null) {
+                return NotFound();
+            }
+
+            var project = await _context.Projects.FindAsync(projectId);
+            if(project == null) {
+                return NotFound();
+            }
+
+            if (project.OwnerId == user.Id) return Ok(3); //user is admin => admin view
+            if(project.Members.Any(member => member.Id == user.Id)) return Ok(2); //admin is collabirator => see colabirator view
+
+            return Ok(1); //neither argument is true, so the user must be logged in but not related to the project thus they see the logged in view
+        }
+        [HttpGet("{id}/AdminProjectView")] //keycloak needed to verify they are admin
         public async Task<ActionResult<ReadProjectAdminInfoDTO>> GetAdminProjectView(int id) {
+            var keycloakId = User.GetId();
+            var username = User.GetUsername();
+
+            if (string.IsNullOrEmpty(keycloakId) || string.IsNullOrEmpty(username)) {
+                return NotFound();
+            }
+            var user = await _userService.GetUserAsyncKeycloak(keycloakId, username);
+            if (user == null) {
+                return NotFound();
+            }
+            var project = await _projectService.GetProjectInAdminViewById(id);
+            if (project.OwnerId != user.Id) return BadRequest("admin rights are needed to view admin page");
+
             try {
-                return Ok(_mapper.Map<ReadProjectAdminInfoDTO>(await _projectService.GetProjectInAdminViewById(id)));
+                return Ok(_mapper.Map<ReadProjectAdminInfoDTO>(project));
             } catch (ProjectNotFoundException ex) {
                 return NotFound(new ProblemDetails {
                     Detail = ex.Message,
                 });
             }
         }
-        [HttpGet("{id}/CollaboratorProjectView")]
+        [HttpGet("{id}/CollaboratorProjectView")] //keycloak needed to verify they are collaborator
         public async Task<ActionResult<ReadProjectCollaboratorInfoDTO>> GetCollaboratorProjectView(int id) {
+            var keycloakId = User.GetId();
+            var username = User.GetUsername();
+
+            if (string.IsNullOrEmpty(keycloakId) || string.IsNullOrEmpty(username)) {
+                return NotFound();
+            }
+            var user = await _userService.GetUserAsyncKeycloak(keycloakId, username);
+            if (user == null) {
+                return NotFound();
+            }
+            var project = await _projectService.GetProjectInAdminViewById(id);
+            if (!project.Members.Any(u => u.Id == user.Id)) return BadRequest("collabirator role are needed to see the collaborator view");
             try {
-                return Ok(_mapper.Map<ReadProjectCollaboratorInfoDTO>(await _projectService.GetProjectInCollaboratorViewById(id)));
+                return Ok(_mapper.Map<ReadProjectCollaboratorInfoDTO>(project));
             } catch (ProjectNotFoundException ex) {
                 return NotFound(new ProblemDetails {
                     Detail = ex.Message,
                 });
             }
         }
-        [HttpGet("{id}/NonCollaboratorProjectView")]
+        [HttpGet("{id}/NonCollaboratorProjectView")] //keycloak is not needed as no private data is shown, and the data should be accasible to not logged in members too
         public async Task<ActionResult<ReadProjectNonCollaboratorInfoDTO>> NonCollaboratorProjectView(int id) {
             try {
                 return Ok(_mapper.Map<ReadProjectNonCollaboratorInfoDTO>(await _projectService.GetProjectById(id)));
@@ -80,8 +129,8 @@ namespace Lagalt_Backend.Controllers
             }
         }
 
-        [HttpGet("ProjectsForMainPage")]
-        public async Task<ActionResult<IEnumerable<GetProjectForMainDTO>>> GetMainProjects(int start, int range) {
+        [HttpGet("ProjectsForMainPage")] //no keycloak required
+        public async Task<ActionResult<IEnumerable<ReadProjectNameDTO>>> GetMainProjects(int start, int range) {
             var projects = await _context.Projects
                 //.Where(project => searchCatagoryType.Contains(project.CategoryName))
                 .ToListAsync();
@@ -99,11 +148,11 @@ namespace Lagalt_Backend.Controllers
             if (end >= projects.Count) {
                 end = projects.Count - 1;
             }
-            return Ok(_mapper.Map<List<GetProjectForMainDTO>>(projects).GetRange(start, end - start + 1));
+            return Ok(_mapper.Map<List<ReadProjectNameDTO>>(projects).GetRange(start, end - start + 1));
         }
 
         // GET: api/Projects/5
-        [HttpGet("{id}")]
+        [HttpGet("{id}")] //this should never be used, thus it should be deleted
         public async Task<ActionResult<GetProjectDetails>> GetProject(int id)
         {
             try
@@ -122,7 +171,7 @@ namespace Lagalt_Backend.Controllers
 
         // PUT: api/Projects/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
+        [HttpPut("{id}")] //keycloak could be used to verify they are logged in, but the user wont access any private data if it is not used
         public async Task<ActionResult> PutProject(int id, EditProjectDTO projectDTO)
         {
             var project = await _projectService.GetProjectById(id);
@@ -150,7 +199,7 @@ namespace Lagalt_Backend.Controllers
 
             return Ok();
         }
-        [HttpPut("{projectId}/AddMemberToProject")]
+        [HttpPut("{projectId}/AddMemberToProject")] 
         public async Task<ActionResult> AddMemberToProject(int projectId, int userId) {
             var project = await _projectService.GetProjectById(projectId);
             if (projectId != project.Id || project == null) {
@@ -174,7 +223,7 @@ namespace Lagalt_Backend.Controllers
 
             return Ok();
         }
-        [HttpPut("{projectId}/RemoveMemberToProject")]
+        [HttpPut("{projectId}/RemoveMemberToProject")]//only accessed on backend, do we need keycloak here?
         public async Task<ActionResult> RemoveMemberToProject(int projectId, int userId) {
             var project = await _projectService.GetProjectById(projectId);
             if (projectId != project.Id || project == null) {
@@ -202,7 +251,7 @@ namespace Lagalt_Backend.Controllers
             return Ok();
         }
 
-        [HttpPut("{projectId}/AddProjectApplication")]
+        [HttpPut("{projectId}/AddProjectApplication")] //could use keycloak to verify that the user exist i guess
         public async Task<ActionResult> AddProjectApplication(int projectId, CreateProjectApplicationDTO applicationDTO) {
             var project = await _projectService.GetProjectById(projectId);
             if (projectId != project.Id) {
@@ -233,7 +282,7 @@ namespace Lagalt_Backend.Controllers
             }
             return Ok();
         }
-        [HttpPut("{applicationId}/RemoveProjectApplicationFromProject")]
+        [HttpPut("{applicationId}/RemoveProjectApplicationFromProject")]  //could use keycloak to verify that the user exist i guess
         public async Task<ActionResult> RemoveProjectApplicationFromProject(int applicationId) {
             var application = await _context.ProjectApplications.FirstOrDefaultAsync();// .FindAsync(applicationId);
            
@@ -262,7 +311,7 @@ namespace Lagalt_Backend.Controllers
 
             return Ok();
         }
-        [HttpPut("{applicationId}/AcceptProjectApplication")]
+        [HttpPut("{applicationId}/AcceptProjectApplication")] //could use keycloak to verify that the user exist i guess
         public async Task<ActionResult> AcceptProjectApplication(int applicationId) {
             var application = await _context.ProjectApplications.FindAsync(applicationId);
 
