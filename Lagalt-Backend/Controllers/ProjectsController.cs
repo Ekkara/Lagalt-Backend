@@ -24,8 +24,7 @@ namespace Lagalt_Backend.Controllers
         private readonly IMapper _mapper;
         private readonly LagaltDbContext _context;
 
-        public ProjectsController(IUserService userService, IProjectService projectService, IMapper mapper, LagaltDbContext context)
-        {
+        public ProjectsController(IUserService userService, IProjectService projectService, IMapper mapper, LagaltDbContext context) {
             _userService = userService; //used when adding a user to the project
             _projectService = projectService;
             _mapper = mapper;
@@ -34,8 +33,7 @@ namespace Lagalt_Backend.Controllers
 
         // GET: api/Projects
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ReadProjectAdminInfoDTO>>> GetProjects()
-        {
+        public async Task<ActionResult<IEnumerable<ReadProjectAdminInfoDTO>>> GetProjects() {
             var projects = _mapper.Map<List<ReadProjectAdminInfoDTO>>(await _context.Projects.Include(p => p.Applications).Include(p => p.Messages).ToListAsync());
             return Ok(projects);
         }
@@ -49,6 +47,40 @@ namespace Lagalt_Backend.Controllers
                 });
             }
         }
+        /// <summary>
+        /// function to determain the relationship a user has to the project
+        /// return 1 if logged in but not a member, so no relation
+        /// return 2 if member to the project
+        /// return 3 if owner of the project
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("UsersRelationToProject")]
+        public async Task<ActionResult<int>> UsersRelationToProject(int projectId, int userId) {
+            //verif the user exist
+            var user = await _userService.GetUserById(userId);
+            if (user == null || user.Id != userId) {
+                return NotFound("user not found with the id " + userId);
+            }
+
+            //verify the project exist, and store it to look at members 
+            var project = await _projectService.GetProjectById(projectId);
+            if (project == null || project.Id != projectId) {
+                return NotFound("user not found with the id " + userId);
+            }
+
+            try {
+                if (userId == project.OwnerId) return 3;
+                else if (project.Members.Any(member => member.Id == userId)) return 2;
+                else return 1;
+
+            } catch (ProjectNotFoundException ex) {
+                return NotFound(new ProblemDetails {
+                    Detail = ex.Message,
+                });
+            }
+        }
+
         [HttpGet("{id}/AdminProjectView")]
         public async Task<ActionResult<ReadProjectAdminInfoDTO>> GetAdminProjectView(int id) {
             try {
@@ -90,7 +122,7 @@ namespace Lagalt_Backend.Controllers
 
                 return BadRequest("Invalid start or range values");
             }
-            if(start >= projects.Count) {
+            if (start >= projects.Count) {
                 return Ok();
             }
 
@@ -104,17 +136,12 @@ namespace Lagalt_Backend.Controllers
 
         // GET: api/Projects/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<GetProjectDetails>> GetProject(int id)
-        {
-            try
-            {
+        public async Task<ActionResult<GetProjectDetails>> GetProject(int id) {
+            try {
                 var project = await _projectService.GetProjectById(id);
                 return Ok(_mapper.Map<GetProjectDetails>(project));
-            }
-            catch (ProjectNotFoundException ex)
-            {
-                return NotFound(new ProblemDetails
-                {
+            } catch (ProjectNotFoundException ex) {
+                return NotFound(new ProblemDetails {
                     Detail = ex.Message,
                 });
             }
@@ -123,27 +150,21 @@ namespace Lagalt_Backend.Controllers
         // PUT: api/Projects/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<ActionResult> PutProject(int id, EditProjectDTO projectDTO)
-        {
+        public async Task<ActionResult> PutProject(int id, EditProjectDTO projectDTO) {
             var project = await _projectService.GetProjectById(id);
-            if (id != project.Id)
-            {
+            if (id != project.Id) {
                 return BadRequest();
             }
             project.ProjectName = projectDTO.ProjectName;
-            project.Description= projectDTO.Description;
+            project.Description = projectDTO.Description;
             project.CategoryName = projectDTO.CategoryName;
             project.IsAvailable = projectDTO.IsAvailable;
             project.RepositoryLink = projectDTO.RepositoryLink;
 
-            try
-            {
+            try {
                 await _projectService.UpdateProject(project);
-            }
-            catch (ProjectNotFoundException ex)
-            {
-                return NotFound(new ProblemDetails
-                {
+            } catch (ProjectNotFoundException ex) {
+                return NotFound(new ProblemDetails {
                     Detail = ex.Message,
                 });
             }
@@ -210,7 +231,7 @@ namespace Lagalt_Backend.Controllers
             }
 
             var sender = await _userService.GetUserById(applicationDTO.ApplicantId);
-            if(sender == null || sender.Id != applicationDTO.ApplicantId) {
+            if (sender == null || sender.Id != applicationDTO.ApplicantId) {
                 return BadRequest();
             }
 
@@ -236,7 +257,7 @@ namespace Lagalt_Backend.Controllers
         [HttpPut("{applicationId}/RemoveProjectApplicationFromProject")]
         public async Task<ActionResult> RemoveProjectApplicationFromProject(int applicationId) {
             var application = await _context.ProjectApplications.FirstOrDefaultAsync();// .FindAsync(applicationId);
-           
+
             if (application == null || application.Id != applicationId) {
                 return BadRequest();
             }
@@ -246,7 +267,7 @@ namespace Lagalt_Backend.Controllers
             if (project == null || project.Id != application.ProjectId) {
                 return BadRequest();
             }
-            
+
             application.Status = "Denied";
             project.Applications.Remove(application);
 
@@ -327,11 +348,10 @@ namespace Lagalt_Backend.Controllers
         // POST: api/Projects
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Project>> PostProject(CreateProjectDTO projectDTO)
-        {
+        public async Task<ActionResult<Project>> PostProject(CreateProjectDTO projectDTO) {
             var user = await _userService.GetUserById(projectDTO.OwnerId);
-            if(user == null || projectDTO.OwnerId != user.Id) {
-            return BadRequest("User to set as the owner is not found");
+            if (user == null || projectDTO.OwnerId != user.Id) {
+                return BadRequest("User to set as the owner is not found");
             }
 
             Project project = _mapper.Map<Project>(projectDTO);
@@ -341,16 +361,11 @@ namespace Lagalt_Backend.Controllers
 
         // DELETE: api/Projects/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteProject(int id)
-        {
-            try
-            {
+        public async Task<ActionResult> DeleteProject(int id) {
+            try {
                 await _projectService.DeleteProject(id);
-            }
-            catch (ProjectNotFoundException ex)
-            {
-                return NotFound(new ProblemDetails
-                {
+            } catch (ProjectNotFoundException ex) {
+                return NotFound(new ProblemDetails {
                     Detail = ex.Message,
                 });
             }

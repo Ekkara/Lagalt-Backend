@@ -20,7 +20,7 @@ namespace Lagalt_Backend.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    [Authorize]
+  
     [Produces(MediaTypeNames.Application.Json)]
     [Consumes(MediaTypeNames.Application.Json)]
     [ApiConventionType(typeof(DefaultApiConventions))]
@@ -41,28 +41,32 @@ namespace Lagalt_Backend.Controllers
         public async Task<ActionResult<IEnumerable<User>>> GetUsers() {
             return Ok(await _userService.GetAllUsers());
         }
-
-        [HttpGet("GetUserprofile")]
-        public async Task<ActionResult> GetUserProfile()
-        {
-            var keycloakId = User.GetId();
-            var username = User.GetUsername();
-
-            if (string.IsNullOrEmpty(keycloakId) || string.IsNullOrEmpty(username))
-            {
-                return BadRequest();
-            }
-
+        [HttpGet("/GetId")]
+        public async Task<ActionResult<int>> GetUserId(string keycloakId, string username) {
             var user = await _userService.GetUserAsyncKeycloak(keycloakId, username);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            var profileUrl = Url.Action("GetUser", "Users", new { id = user.Id }, Request.Scheme);
-            Response.Headers.Add("Location", profileUrl);
-            return StatusCode(303);
+            return Ok(user.Id);
         }
+        //[HttpGet("GetUserprofile")]
+        //public async Task<ActionResult> GetUserProfile()
+        //{
+        //    var keycloakId = User.GetId();
+        //    var username = User.GetUsername();
+
+        //    if (string.IsNullOrEmpty(keycloakId) || string.IsNullOrEmpty(username))
+        //    {
+        //        return BadRequest();
+        //    }
+
+        //    var user = await _userService.GetUserAsyncKeycloak(keycloakId, username);
+        //    if (user == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    var profileUrl = Url.Action("GetUser", "Users", new { id = user.Id }, Request.Scheme);
+        //    Response.Headers.Add("Location", profileUrl);
+        //    return StatusCode(303);
+        //}
 
         [HttpPut("{UpdateUserid}")]
         public async Task<IActionResult> UpdateUser(int id, EditUserDto userInput)

@@ -30,7 +30,6 @@ namespace Lagalt_Backend.Services
             {
                 throw new UserNotFoundException(id);
             }
-
             return user;
         }
         public async Task RemoveSkillIfLast(string skill) {
@@ -105,6 +104,13 @@ namespace Lagalt_Backend.Services
             }
             return user;
         }
+        public async Task<User> PostAsyncKeycloakUsername(string keycloakId, string username) {
+            User user = new User { KeycloakId = keycloakId, UserName = username };
+
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+            return user;
+        }
 
         public async Task UpdateUserAsyncPatch(User updatedUser, User userToPatch)
         {
@@ -126,15 +132,6 @@ namespace Lagalt_Backend.Services
             }
             _context.Entry(userToPatch).State = EntityState.Modified;
             await _context.SaveChangesAsync();
-        }
-
-        public async Task<User> PostAsyncKeycloakUsername(string keycloakId, string username)
-        {
-            User user = new User { KeycloakId = keycloakId, UserName = username };
-
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
-            return user;
         }
 
         public async Task<bool> UserInDbKeycloak(string keycloakId)

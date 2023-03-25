@@ -4,6 +4,16 @@
         <name>Lagalt-Backend</name>
     </assembly>
     <members>
+        <member name="M:Lagalt_Backend.Controllers.ProjectsController.UsersRelationToProject(System.Int32,System.Int32)">
+            <summary>
+            function to determain the relationship a user has to the project
+            return 1 if logged in but not a member, so no relation
+            return 2 if member to the project
+            return 3 if owner of the project
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
         <member name="T:Lagalt_Backend.Migrations.restore">
             <inheritdoc />
         </member>
@@ -98,6 +108,30 @@
             <inheritdoc />
         </member>
         <member name="M:Lagalt_Backend.Migrations.InitUpdateKeycloak.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:Lagalt_Backend.Migrations.keycloakMyEnd">
+            <inheritdoc />
+        </member>
+        <member name="M:Lagalt_Backend.Migrations.keycloakMyEnd.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Lagalt_Backend.Migrations.keycloakMyEnd.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Lagalt_Backend.Migrations.keycloakMyEnd.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:Lagalt_Backend.Migrations.test">
+            <inheritdoc />
+        </member>
+        <member name="M:Lagalt_Backend.Migrations.test.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Lagalt_Backend.Migrations.test.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Lagalt_Backend.Migrations.test.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <inheritdoc />
         </member>
     </members>
