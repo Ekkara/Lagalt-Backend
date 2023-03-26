@@ -81,30 +81,50 @@ namespace Lagalt_Backend.Controllers
             }
         }
 
-        [HttpGet("{id}/AdminProjectView")]
-        public async Task<ActionResult<ReadProjectAdminInfoDTO>> GetAdminProjectView(int id) {
+        [HttpGet("{projectId}/AdminProjectView")]
+        public async Task<ActionResult<ReadProjectAdminInfoDTO>> GetAdminProjectView(int projectId, int userId) {
+            var user = await _userService.GetUserById(userId);
+            if (user == null || user.Id != userId) return NotFound("The user was not found");
+            
+            var project = await _projectService.GetProjectById(projectId);
+            if (project == null || project.Id != projectId) return NotFound("The project was not found");
+            
+            if(project.OwnerId != userId) return Unauthorized("The user do not have acces to view this material"); 
+
             try {
-                return Ok(_mapper.Map<ReadProjectAdminInfoDTO>(await _projectService.GetProjectInAdminViewById(id)));
+                return Ok(_mapper.Map<ReadProjectAdminInfoDTO>(await _projectService.GetProjectInAdminViewById(projectId)));
             } catch (ProjectNotFoundException ex) {
                 return NotFound(new ProblemDetails {
                     Detail = ex.Message,
                 });
             }
         }
-        [HttpGet("{id}/CollaboratorProjectView")]
-        public async Task<ActionResult<ReadProjectCollaboratorInfoDTO>> GetCollaboratorProjectView(int id) {
+        [HttpGet("{projectId}/CollaboratorProjectView")]
+        public async Task<ActionResult<ReadProjectCollaboratorInfoDTO>> GetCollaboratorProjectView(int projectId, int userId) {
+            var user = await _userService.GetUserById(userId);
+            if (user == null || user.Id != userId) return NotFound("The user was not found");
+            
+            var project = await _projectService.GetProjectById(projectId);
+            if (project == null || project.Id != projectId) return NotFound("The project was not found");
+            
+            if (!project.Members.Any(member => member.Id == userId)) return Unauthorized("The user do not have acces to view this material");
+
             try {
-                return Ok(_mapper.Map<ReadProjectCollaboratorInfoDTO>(await _projectService.GetProjectInCollaboratorViewById(id)));
+                return Ok(_mapper.Map<ReadProjectCollaboratorInfoDTO>(await _projectService.GetProjectInCollaboratorViewById(projectId)));
             } catch (ProjectNotFoundException ex) {
                 return NotFound(new ProblemDetails {
                     Detail = ex.Message,
                 });
             }
         }
-        [HttpGet("{id}/NonCollaboratorProjectView")]
-        public async Task<ActionResult<ReadProjectNonCollaboratorInfoDTO>> NonCollaboratorProjectView(int id) {
+        [HttpGet("{projectId}/NonCollaboratorProjectView")]
+        public async Task<ActionResult<ReadProjectNonCollaboratorInfoDTO>> NonCollaboratorProjectView(int projectId) {
+            //public data, no security needed
+            var project = await _projectService.GetProjectById(projectId);
+            if (project == null || project.Id != projectId) return NotFound("The project was not found");
+
             try {
-                return Ok(_mapper.Map<ReadProjectNonCollaboratorInfoDTO>(await _projectService.GetProjectById(id)));
+                return Ok(_mapper.Map<ReadProjectNonCollaboratorInfoDTO>(await _projectService.GetProjectById(projectId)));
             } catch (ProjectNotFoundException ex) {
                 return NotFound(new ProblemDetails {
                     Detail = ex.Message,
@@ -195,8 +215,8 @@ namespace Lagalt_Backend.Controllers
 
             return Ok();
         }
-        [HttpPut("{projectId}/RemoveMemberToProject")]
-        public async Task<ActionResult> RemoveMemberToProject(int projectId, int userId) {
+        [HttpPut("{projectId}/RemoveMemberFromProject")]
+        public async Task<ActionResult> RemoveMemberFromProject(int projectId, int userId) {
             var project = await _projectService.GetProjectById(projectId);
             if (projectId != project.Id || project == null) {
                 return BadRequest("Project does not exist!");
@@ -208,7 +228,11 @@ namespace Lagalt_Backend.Controllers
             }
 
             if (!project.Members.Any(member => member.Id == userId)) {
-                return BadRequest("user was not in the project");
+                return BadRequest("User was not in the project");
+            }
+
+            if (project.OwnerId == userId) {
+                return BadRequest("Can't kick the owner");
             }
 
             project.Members.Remove(user);

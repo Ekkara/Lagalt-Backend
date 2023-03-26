@@ -68,37 +68,52 @@ namespace Lagalt_Backend.Controllers
         //    return StatusCode(303);
         //}
 
-        [HttpPut("{UpdateUserid}")]
-        public async Task<IActionResult> UpdateUser(int id, EditUserDto userInput)
+        [HttpPut("{id}/UpdateUser")]
+        public async Task<IActionResult> UpdateUser(int id, EditUserDTO userDTO)
         {
-            var keycloakId = User.GetId();
-            if (string.IsNullOrEmpty(keycloakId))
-            {
-                return BadRequest("Invalid Keycloak ID.");
+            var user = await _userService.GetUserById(id);
+            if (user == null || user.Id != id) { return BadRequest("User not found"); }
+
+            user.Description = userDTO.Description;
+            user.IsProfileHiden = userDTO.IsProfileHiden;
+
+            try {
+                await _userService.UpdateUser(user);
+            } catch (UserNotFoundException ex) {
+                return NotFound(new ProblemDetails {
+                    Detail = ex.Message,
+                });
             }
 
-            var userToPatch = _userService.GetUserFromKeyCloak(keycloakId);
-            if (userToPatch == null)
-            {
-                return NotFound("User not found.");
-            }
+            return NoContent();
+            //var keycloakId = User.GetId();
+            //if (string.IsNullOrEmpty(keycloakId))
+            //{
+            //    return BadRequest("Invalid Keycloak ID.");
+            //}
 
-            if (userToPatch.Id != id)
-            {
-                return BadRequest("User ID mismatch.");
-            }
+            //var userToPatch = _userService.GetUserFromKeyCloak(keycloakId);
+            //if (userToPatch == null)
+            //{
+            //    return NotFound("User not found.");
+            //}
 
-            var updatedUser = _mapper.Map<User>(userInput);
-            try
-            {
-                await _userService.UpdateUserAsyncPatch(updatedUser, userToPatch);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Error updating user: {ex.Message}");
-            }
+            //if (userToPatch.Id != id)
+            //{
+            //    return BadRequest("User ID mismatch.");
+            //}
 
-            return Ok(userToPatch);
+            //var updatedUser = _mapper.Map<User>(userDTO);
+            //try
+            //{
+            //    await _userService.UpdateUserAsyncPatch(updatedUser, userToPatch);
+            //}
+            //catch (Exception ex)
+            //{
+            //    return StatusCode(500, $"Error updating user: {ex.Message}");
+            //}
+
+            //return Ok(userToPatch);
         }
 
 
@@ -116,7 +131,11 @@ namespace Lagalt_Backend.Controllers
 
             if (user.IsProfileHiden) {
                 if (user.Id != viewerId) {
-                    var projectApplications = await _context.ProjectApplications.Where(pa => pa.Id == userId).ToListAsync();
+                    var projectApplications = await _context.ProjectApplications
+                        .Where(pa => pa.ApplicantId == userId)
+                        .Include(pa => pa.Project)
+                        .ToListAsync();
+
                     if (!projectApplications.Any(pa => pa.Project.OwnerId == viewerId)) {
                         userDTO.Projects = new List<Models.DTO.Project.ReadProjectNameDTO>();
                         userDTO.Skills = new List<Skill>();
@@ -136,25 +155,11 @@ namespace Lagalt_Backend.Controllers
 
         // PUT: api/Users/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<ActionResult> PutUser(int id, User user) {
-            if (id != user.Id) {
-                return BadRequest();
-            }
-
-            try {
-                await _userService.UpdateUser(user);
-            } catch (UserNotFoundException ex) {
-                return NotFound(new ProblemDetails {
-                    Detail = ex.Message,
-                });
-            }
-
-            return NoContent();
-        }
+    
 
         [HttpPut("{id}/AddSkill")]
         public async Task<ActionResult> AddSkillToUser(int id, string skill) {
+            skill = skill.Trim();
             if (skill == null || skill == "") {
                 return BadRequest("not a valid skill");
             }
@@ -164,7 +169,7 @@ namespace Lagalt_Backend.Controllers
                 return NotFound();
             }
 
-            if(user.Skills.Any(s => s.Name == skill)) {
+            if(user.Skills.Any(s => s.Name.ToLower() == skill.ToLower())) {
                 return BadRequest("the skill is already in user");
             }
 

@@ -9,6 +9,7 @@ namespace Lagalt_Backend.Models.DTO.User
         public string PictureURL { get; set; }
         public string Description { get; set; }
         public bool DisplayingProfile { get; set; }
+        public bool IsProfileHiden { get; set; }
 
         public List<ReadProjectNameDTO> Projects { get; set; } = new List<ReadProjectNameDTO>();
         public List<Skill> Skills { get; set; } = new List<Skill>();

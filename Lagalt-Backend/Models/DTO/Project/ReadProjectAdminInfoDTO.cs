@@ -7,6 +7,7 @@ namespace Lagalt_Backend.Models.DTO.Project
     public class ReadProjectAdminInfoDTO
     {
         public int Id { get; set; }
+        public int OwnerId { get; set; }
         public string ProjectName { get; set; }
         public string Description { get; set; }
         public string CategoryName { get; set; }
