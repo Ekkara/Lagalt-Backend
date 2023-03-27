@@ -20,7 +20,7 @@ namespace Lagalt_Backend.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-  
+    //[Authorize]
     [Produces(MediaTypeNames.Application.Json)]
     [Consumes(MediaTypeNames.Application.Json)]
     [ApiConventionType(typeof(DefaultApiConventions))]
@@ -214,7 +214,6 @@ namespace Lagalt_Backend.Controllers
                     Detail = ex.Message,
                 });
             }
-
             return NoContent();
         }
 
