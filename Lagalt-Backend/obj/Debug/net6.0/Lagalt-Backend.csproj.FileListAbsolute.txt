@@ -287,8 +287,6 @@ C:\Users\MNiazi.CORP\Documents\GitHub\Lagalt-Backend\Lagalt-Backend\bin\Debug\ne
 C:\Users\MNiazi.CORP\Documents\GitHub\Lagalt-Backend\Lagalt-Backend\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Drawing.Common.dll
 C:\Users\MNiazi.CORP\Documents\GitHub\Lagalt-Backend\Lagalt-Backend\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
 C:\Users\MNiazi.CORP\Documents\GitHub\Lagalt-Backend\Lagalt-Backend\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
-C:\Users\MNiazi.CORP\Documents\GitHub\Lagalt-Backend\Lagalt-Backend\obj\Debug\net6.0\Lagalt-Backend.RazorAssemblyInfo.cache
-C:\Users\MNiazi.CORP\Documents\GitHub\Lagalt-Backend\Lagalt-Backend\obj\Debug\net6.0\Lagalt-Backend.RazorAssemblyInfo.cs
 C:\Users\EGus01\Documents\GitHub\Lagalt-Backend\Lagalt-Backend\bin\Debug\net6.0\appsettings.Development.json
 C:\Users\EGus01\Documents\GitHub\Lagalt-Backend\Lagalt-Backend\bin\Debug\net6.0\appsettings.json
 C:\Users\EGus01\Documents\GitHub\Lagalt-Backend\Lagalt-Backend\bin\Debug\net6.0\Lagalt-Backend.exe
@@ -881,3 +879,10 @@ C:\Users\EGus01\Documents\GitHub\Lagalt-Backend\Lagalt-Backend\bin\Debug\net6.0\
 C:\Users\EGus01\Documents\GitHub\Lagalt-Backend\Lagalt-Backend\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 C:\Users\EGus01\Documents\GitHub\Lagalt-Backend\Lagalt-Backend\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.OpenIdConnect.dll
 C:\Users\EGus01\Documents\GitHub\Lagalt-Backend\Lagalt-Backend\obj\Debug\net6.0\Lagalt-Backend.xml
+C:\Users\MNiazi.CORP\Documents\GitHub\Lagalt-Backend\Lagalt-Backend\bin\Debug\net6.0\Lagalt-Backend.xml
+C:\Users\MNiazi.CORP\Documents\GitHub\Lagalt-Backend\Lagalt-Backend\bin\Debug\net6.0\AutoMapper.dll
+C:\Users\MNiazi.CORP\Documents\GitHub\Lagalt-Backend\Lagalt-Backend\bin\Debug\net6.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
+C:\Users\MNiazi.CORP\Documents\GitHub\Lagalt-Backend\Lagalt-Backend\bin\Debug\net6.0\Keycloak.AspNetCore.dll
+C:\Users\MNiazi.CORP\Documents\GitHub\Lagalt-Backend\Lagalt-Backend\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\MNiazi.CORP\Documents\GitHub\Lagalt-Backend\Lagalt-Backend\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.OpenIdConnect.dll
+C:\Users\MNiazi.CORP\Documents\GitHub\Lagalt-Backend\Lagalt-Backend\obj\Debug\net6.0\Lagalt-Backend.xml

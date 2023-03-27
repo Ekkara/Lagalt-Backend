@@ -7,7 +7,7 @@
 namespace Lagalt_Backend.Migrations
 {
     /// <inheritdoc />
-    public partial class restore : Migration
+    public partial class initMiklos : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -36,6 +36,7 @@ namespace Lagalt_Backend.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    KeycloakId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PictureURL = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -53,7 +54,7 @@ namespace Lagalt_Backend.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ProjectId = table.Column<int>(type: "int", nullable: false),
-                    SenderId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SenderId = table.Column<int>(type: "int", nullable: false),
                     SenderName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Text = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
@@ -76,9 +77,10 @@ namespace Lagalt_Backend.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ProjectId = table.Column<int>(type: "int", nullable: false),
                     ApplicantId = table.Column<int>(type: "int", nullable: false),
+                    ApplicantName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Message = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Date = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -87,6 +89,49 @@ namespace Lagalt_Backend.Migrations
                         name: "FK_ProjectApplications_Projects_ProjectId",
                         column: x => x.ProjectId,
                         principalTable: "Projects",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Skills",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Skills", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Skills_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserProject",
+                columns: table => new
+                {
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    ProjectId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserProject", x => new { x.UserId, x.ProjectId });
+                    table.ForeignKey(
+                        name: "FK_UserProject_Projects_ProjectId",
+                        column: x => x.ProjectId,
+                        principalTable: "Projects",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserProject_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -102,11 +147,11 @@ namespace Lagalt_Backend.Migrations
 
             migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "Id", "Description", "IsProfileHiden", "PictureURL", "UserName" },
+                columns: new[] { "Id", "Description", "IsProfileHiden", "KeycloakId", "PictureURL", "UserName" },
                 values: new object[,]
                 {
-                    { 1, "", true, "", "Maddie" },
-                    { 2, "", false, "", "Alice" }
+                    { 1, "", true, "20a04c91-29d4-4603-a640-e94908d22175", "", "Maddie" },
+                    { 2, "", false, "04b29fd4-862e-452f-a48d-d987a68c0104", "", "Alice" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -117,6 +162,16 @@ namespace Lagalt_Backend.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_ProjectApplications_ProjectId",
                 table: "ProjectApplications",
+                column: "ProjectId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Skills_UserId",
+                table: "Skills",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserProject_ProjectId",
+                table: "UserProject",
                 column: "ProjectId");
         }
 
@@ -130,10 +185,16 @@ namespace Lagalt_Backend.Migrations
                 name: "ProjectApplications");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "Skills");
+
+            migrationBuilder.DropTable(
+                name: "UserProject");
 
             migrationBuilder.DropTable(
                 name: "Projects");
+
+            migrationBuilder.DropTable(
+                name: "Users");
         }
     }
 }
