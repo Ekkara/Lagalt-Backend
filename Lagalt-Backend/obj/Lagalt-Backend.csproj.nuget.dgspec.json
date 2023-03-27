@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\EGus01\\Documents\\GitHub\\Lagalt-Backend\\Lagalt-Backend\\Lagalt-Backend.csproj": {}
+    "C:\\Users\\MNiazi.CORP\\Documents\\GitHub\\Lagalt-Backend\\Lagalt-Backend\\Lagalt-Backend.csproj": {}
   },
   "projects": {
-    "C:\\Users\\EGus01\\Documents\\GitHub\\Lagalt-Backend\\Lagalt-Backend\\Lagalt-Backend.csproj": {
+    "C:\\Users\\MNiazi.CORP\\Documents\\GitHub\\Lagalt-Backend\\Lagalt-Backend\\Lagalt-Backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\EGus01\\Documents\\GitHub\\Lagalt-Backend\\Lagalt-Backend\\Lagalt-Backend.csproj",
+        "projectUniqueName": "C:\\Users\\MNiazi.CORP\\Documents\\GitHub\\Lagalt-Backend\\Lagalt-Backend\\Lagalt-Backend.csproj",
         "projectName": "Lagalt-Backend",
-        "projectPath": "C:\\Users\\EGus01\\Documents\\GitHub\\Lagalt-Backend\\Lagalt-Backend\\Lagalt-Backend.csproj",
-        "packagesPath": "C:\\Users\\EGus01\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\EGus01\\Documents\\GitHub\\Lagalt-Backend\\Lagalt-Backend\\obj\\",
+        "projectPath": "C:\\Users\\MNiazi.CORP\\Documents\\GitHub\\Lagalt-Backend\\Lagalt-Backend\\Lagalt-Backend.csproj",
+        "packagesPath": "C:\\Users\\MNiazi.CORP\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\MNiazi.CORP\\Documents\\GitHub\\Lagalt-Backend\\Lagalt-Backend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\EGus01\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\MNiazi.CORP\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -73,6 +73,10 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[7.0.3, )"
+            },
+            "Microsoft.VisualStudio.Azure.Containers.Tools.Targets": {
+              "target": "Package",
+              "version": "[1.17.0, )"
             },
             "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
               "target": "Package",
