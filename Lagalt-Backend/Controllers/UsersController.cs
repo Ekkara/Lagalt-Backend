@@ -20,7 +20,7 @@ namespace Lagalt_Backend.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     [Produces(MediaTypeNames.Application.Json)]
     [Consumes(MediaTypeNames.Application.Json)]
     [ApiConventionType(typeof(DefaultApiConventions))]
@@ -36,33 +36,77 @@ namespace Lagalt_Backend.Controllers
             _mapper = mapper;
         }
 
-        // GET: api/Users
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers() {
-            return Ok(await _userService.GetAllUsers());
+        public async Task<ActionResult<IEnumerable<ReadUserDTO>>> GetUsers()
+        {
+            return Ok(_mapper.Map<IEnumerable<ReadUserDTO>>(await _userService.GetAllUsers()));
+
         }
 
-        [HttpGet("GetUserprofile")]
-        public async Task<ActionResult> GetUserProfile()
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ReadUserDTO>> GetUserById(int id)
         {
-            var keycloakId = User.GetId();
-            var username = User.GetUsername();
-
-            if (string.IsNullOrEmpty(keycloakId) || string.IsNullOrEmpty(username))
+            try
             {
-                return BadRequest();
-            }
+                string? keycloakId = this.User.GetId();
+                var username = this.User.GetUsername();
 
-            var user = await _userService.GetUserAsyncKeycloak(keycloakId, username);
-            if (user == null)
+                if (keycloakId == null || username == null)
+                {
+                    throw new Exception("Invalid Keycloak ID or username.");
+                }
+
+                User user = await _userService.GetUserAsyncKeycloak(keycloakId, username);
+                var userDto = _mapper.Map<ReadUserDTO>(user);
+                return Ok(userDto);
+            }
+            catch (UserNotFoundException)
             {
                 return NotFound();
             }
-
-            var profileUrl = Url.Action("GetUser", "Users", new { id = user.Id }, Request.Scheme);
-            Response.Headers.Add("Location", profileUrl);
-            return StatusCode(303);
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
+
+
+        
+        //// get: api/users
+        //[HttpGet("{id}")]
+        //public async Task<ActionResult<ReadUserDTO>> GetUserById(int id)
+        //{
+        //    try
+        //    {
+        //        User user = await _userService.GetUserById(id);
+        //        var userDto = _mapper.Map<ReadUserDTO>(user);
+        //        return Ok(userDto);
+        //    }
+        //    catch (UserNotFoundException ex)
+        //    {
+        //        return NotFound(new ProblemDetails
+        //        {
+        //            Detail = ex.Message,
+        //        });
+        //    }
+        //}
+        // //GET: api/UsersPriles
+        //[HttpGet]
+        // public async Task<ActionResult<User>> GetUserProfile()
+        // {
+        //     string? keycloakId = this.User.GetId();
+        //     var username = this.User.GetUsername();
+
+        //     if (keycloakId == null || username == null)
+        //     {
+        //         return BadRequest();
+        //     }
+
+        //     var user = await _userService.GetUserAsyncKeycloak(keycloakId, username);
+
+        //     return user == null ? NotFound() : Ok(user);
+        // }
+
 
         [HttpPut("{UpdateUserid}")]
         public async Task<IActionResult> UpdateUser(int id, EditUserDto userInput)
@@ -99,36 +143,36 @@ namespace Lagalt_Backend.Controllers
 
 
 
-        // GET: api/Users/5
-        [HttpGet("{userId}")]
-        public async Task<ActionResult<ReadUserDTO>> GetUser(int userId, int viewerId) {
-            var user = await _userService.GetUserById(userId);
-            if(user == null || user.Id != userId) {
-            return BadRequest();
-            }
+        //// GET: api/Users/5
+        //[HttpGet("{userId}")]
+        //public async Task<ActionResult<ReadUserDTO>> GetUser(int userId, int viewerId) {
+        //    var user = await _userService.GetUserById(userId);
+        //    if(user == null || user.Id != userId) {
+        //    return BadRequest();
+        //    }
 
-            ReadUserDTO userDTO = _mapper.Map<ReadUserDTO>(user);
-            userDTO.DisplayingProfile = true;
+        //    ReadUserDTO userDTO = _mapper.Map<ReadUserDTO>(user);
+        //    userDTO.DisplayingProfile = true;
 
-            if (user.IsProfileHiden) {
-                if (user.Id != viewerId) {
-                    var projectApplications = await _context.ProjectApplications.Where(pa => pa.Id == userId).ToListAsync();
-                    if (!projectApplications.Any(pa => pa.Project.OwnerId == viewerId)) {
-                        userDTO.Projects = new List<Models.DTO.Project.ReadProjectNameDTO>();
-                        userDTO.Skills = new List<Skill>();
-                        userDTO.Description = "This user's profile is set to be hidden";
-                        userDTO.DisplayingProfile = false;
-                    }
-                }
-            }
-            try {
-                return userDTO;
-            } catch (UserNotFoundException ex) {
-                return NotFound(new ProblemDetails {
-                    Detail = ex.Message,
-                });
-            }
-        }
+        //    if (user.IsProfileHiden) {
+        //        if (user.Id != viewerId) {
+        //            var projectApplications = await _context.ProjectApplications.Where(pa => pa.Id == userId).ToListAsync();
+        //            if (!projectApplications.Any(pa => pa.Project.OwnerId == viewerId)) {
+        //                userDTO.Projects = new List<Models.DTO.Project.ReadProjectNameDTO>();
+        //                userDTO.Skills = new List<Skill>();
+        //                userDTO.Description = "This user's profile is set to be hidden";
+        //                userDTO.DisplayingProfile = false;
+        //            }
+        //        }
+        //    }
+        //    try {
+        //        return userDTO;
+        //    } catch (UserNotFoundException ex) {
+        //        return NotFound(new ProblemDetails {
+        //            Detail = ex.Message,
+        //        });
+        //    }
+        //}
 
         // PUT: api/Users/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -216,6 +260,7 @@ namespace Lagalt_Backend.Controllers
             var user = _mapper.Map<User>(userDTO);
             return CreatedAtAction("GetUser", new { id = user.Id }, await _userService.AddUser(user));
         }
+
 
         // DELETE: api/Users/5
         [HttpDelete("{id}")]

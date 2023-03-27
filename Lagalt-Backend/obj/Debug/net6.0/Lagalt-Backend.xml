@@ -100,5 +100,17 @@
         <member name="M:Lagalt_Backend.Migrations.InitUpdateKeycloak.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <inheritdoc />
         </member>
+        <member name="T:Lagalt_Backend.Migrations.InitLatestUpdatedDenotationClasses">
+            <inheritdoc />
+        </member>
+        <member name="M:Lagalt_Backend.Migrations.InitLatestUpdatedDenotationClasses.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Lagalt_Backend.Migrations.InitLatestUpdatedDenotationClasses.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Lagalt_Backend.Migrations.InitLatestUpdatedDenotationClasses.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
     </members>
 </doc>

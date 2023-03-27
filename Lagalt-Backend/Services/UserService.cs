@@ -15,7 +15,7 @@ namespace Lagalt_Backend.Services
 
         public async Task<IEnumerable<User>> GetAllUsers()
         {
-            return await _context.Users.ToListAsync();
+            return await _context.Users.Include(s => s.Skills).Include(p => p.Projects).ToListAsync();
         }
 
         public async Task<User> GetUserById(int id)
@@ -97,7 +97,7 @@ namespace Lagalt_Backend.Services
 
         public async Task<User> GetUserAsyncKeycloak(string keycloakId, string username)
         {
-            var user = await _context.Users.SingleOrDefaultAsync(u => u.KeycloakId == keycloakId);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.KeycloakId == keycloakId);
 
             if (user == null)
             {

@@ -7,6 +7,7 @@ using Microsoft.OpenApi.Models;
 using System.Reflection;
 using System.Text.Json.Serialization;
 using System.IO;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,9 +19,13 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: "AllowAll",
         policy =>
         {
-            policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+            policy.WithOrigins("http://localhost:3000")
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials();
         });
 });
+
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -31,24 +36,27 @@ builder.Services.AddControllers().AddJsonOptions(options => {
 
 
 // Configure authentication
+var keycloakBaseUrl = builder.Configuration["Keycloak:BaseUrl"];
+var keycloakRealm = builder.Configuration["Keycloak:Realm"];
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(opt =>
     {
         opt.TokenValidationParameters = new TokenValidationParameters
         {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidIssuer = "https://lemur-3.cloud-iam.com/auth/realms/projectlagaltfullstack",
-            ValidAudience = "account",
+            // ...
+            ValidIssuer = $"{keycloakBaseUrl}/realms/{keycloakRealm}",
+            // ...
             IssuerSigningKeyResolver = (token, securityToken, kid, parameters) =>
             {
                 var client = new HttpClient();
-                var keyuri = "https://lemur-3.cloud-iam.com/auth/realms/projectlagaltfullstack/protocol/openid-connect/certs";
+                var keyuri = $"{keycloakBaseUrl}/realms/{keycloakRealm}/protocol/openid-connect/certs";
                 var response = client.GetAsync(keyuri).Result;
                 var responseString = response.Content.ReadAsStringAsync().Result;
                 var keys = new JsonWebKeySet(responseString);
-                return keys.Keys;
+                return keys.Keys; // Add this return statement
             }
+
         };
     });
 
