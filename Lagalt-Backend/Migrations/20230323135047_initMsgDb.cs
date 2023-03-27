@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -7,7 +8,7 @@
 namespace Lagalt_Backend.Migrations
 {
     /// <inheritdoc />
-    public partial class initDb : Migration
+    public partial class initMsgDb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -55,7 +56,8 @@ namespace Lagalt_Backend.Migrations
                     ProjectId = table.Column<int>(type: "int", nullable: false),
                     SenderId = table.Column<int>(type: "int", nullable: false),
                     SenderName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Text = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PostedTime = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {

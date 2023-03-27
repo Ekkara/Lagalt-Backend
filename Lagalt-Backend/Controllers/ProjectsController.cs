@@ -12,6 +12,7 @@ using Lagalt_Backend.Models.DTO.Project;
 using AutoMapper;
 using Lagalt_Backend.Models.DTO.ProjectApplication;
 using Lagalt_Backend.Models.DTO.Message;
+using PusherServer;
 
 namespace Lagalt_Backend.Controllers
 {
@@ -41,48 +42,69 @@ namespace Lagalt_Backend.Controllers
             return Ok(projects);
         }
         [HttpGet("{id}/ProjectExist")]
-        public async Task<ActionResult<bool>> ReadIfProjectExist(int id) {
-            try {
+        public async Task<ActionResult<bool>> ReadIfProjectExist(int id)
+        {
+            try
+            {
                 return Ok(await _context.Projects.AnyAsync(project => project.Id == id));
-            } catch (ProjectNotFoundException ex) {
-                return NotFound(new ProblemDetails {
+            }
+            catch (ProjectNotFoundException ex)
+            {
+                return NotFound(new ProblemDetails
+                {
                     Detail = ex.Message,
                 });
             }
         }
         [HttpGet("{id}/AdminProjectView")]
-        public async Task<ActionResult<ReadProjectAdminInfoDTO>> GetAdminProjectView(int id) {
-            try {
+        public async Task<ActionResult<ReadProjectAdminInfoDTO>> GetAdminProjectView(int id)
+        {
+            try
+            {
                 return Ok(_mapper.Map<ReadProjectAdminInfoDTO>(await _projectService.GetProjectInAdminViewById(id)));
-            } catch (ProjectNotFoundException ex) {
-                return NotFound(new ProblemDetails {
+            }
+            catch (ProjectNotFoundException ex)
+            {
+                return NotFound(new ProblemDetails
+                {
                     Detail = ex.Message,
                 });
             }
         }
         [HttpGet("{id}/CollaboratorProjectView")]
-        public async Task<ActionResult<ReadProjectCollaboratorInfoDTO>> GetCollaboratorProjectView(int id) {
-            try {
+        public async Task<ActionResult<ReadProjectCollaboratorInfoDTO>> GetCollaboratorProjectView(int id)
+        {
+            try
+            {
                 return Ok(_mapper.Map<ReadProjectCollaboratorInfoDTO>(await _projectService.GetProjectInCollaboratorViewById(id)));
-            } catch (ProjectNotFoundException ex) {
-                return NotFound(new ProblemDetails {
+            }
+            catch (ProjectNotFoundException ex)
+            {
+                return NotFound(new ProblemDetails
+                {
                     Detail = ex.Message,
                 });
             }
         }
         [HttpGet("{id}/NonCollaboratorProjectView")]
-        public async Task<ActionResult<ReadProjectNonCollaboratorInfoDTO>> NonCollaboratorProjectView(int id) {
-            try {
+        public async Task<ActionResult<ReadProjectNonCollaboratorInfoDTO>> NonCollaboratorProjectView(int id)
+        {
+            try
+            {
                 return Ok(_mapper.Map<ReadProjectNonCollaboratorInfoDTO>(await _projectService.GetProjectById(id)));
-            } catch (ProjectNotFoundException ex) {
-                return NotFound(new ProblemDetails {
+            }
+            catch (ProjectNotFoundException ex)
+            {
+                return NotFound(new ProblemDetails
+                {
                     Detail = ex.Message,
                 });
             }
         }
 
         [HttpGet("ProjectsForMainPage")]
-        public async Task<ActionResult<IEnumerable<GetProjectForMainDTO>>> GetMainProjects(int start, int range) {
+        public async Task<ActionResult<IEnumerable<GetProjectForMainDTO>>> GetMainProjects(int start, int range)
+        {
             var projects = await _context.Projects.ToListAsync();
             return Ok(_mapper.Map<List<GetProjectForMainDTO>>(projects).GetRange(start, range));
         }
@@ -116,7 +138,7 @@ namespace Lagalt_Backend.Controllers
                 return BadRequest();
             }
             project.ProjectName = projectDTO.ProjectName;
-            project.Description= projectDTO.Description;
+            project.Description = projectDTO.Description;
             project.CategoryName = projectDTO.CategoryName;
             project.IsAvailable = projectDTO.IsAvailable;
             project.RepositoryLink = projectDTO.RepositoryLink;
@@ -136,23 +158,30 @@ namespace Lagalt_Backend.Controllers
             return Ok();
         }
         [HttpPut("{projectId}/AddMemberToProject")]
-        public async Task<ActionResult> AddMemberToProject(int projectId, int userId) {
+        public async Task<ActionResult> AddMemberToProject(int projectId, int userId)
+        {
             var project = await _projectService.GetProjectById(projectId);
-            if (projectId != project.Id || project == null) {
+            if (projectId != project.Id || project == null)
+            {
                 return BadRequest();
             }
 
             var user = await _userService.GetUserById(userId);
-            if (userId != user.Id || user == null) {
+            if (userId != user.Id || user == null)
+            {
                 return BadRequest();
             }
 
             project.Members.Add(user);
 
-            try {
+            try
+            {
                 await _projectService.UpdateProject(project);
-            } catch (ProjectNotFoundException ex) {
-                return NotFound(new ProblemDetails {
+            }
+            catch (ProjectNotFoundException ex)
+            {
+                return NotFound(new ProblemDetails
+                {
                     Detail = ex.Message,
                 });
             }
@@ -160,27 +189,35 @@ namespace Lagalt_Backend.Controllers
             return Ok();
         }
         [HttpPut("{projectId}/RemoveMemberToProject")]
-        public async Task<ActionResult> RemoveMemberToProject(int projectId, int userId) {
+        public async Task<ActionResult> RemoveMemberToProject(int projectId, int userId)
+        {
             var project = await _projectService.GetProjectById(projectId);
-            if (projectId != project.Id || project == null) {
+            if (projectId != project.Id || project == null)
+            {
                 return BadRequest("Project does not exist!");
             }
 
             var user = await _userService.GetUserById(userId);
-            if (userId != user.Id || user == null) {
+            if (userId != user.Id || user == null)
+            {
                 return BadRequest("User does not exist!");
             }
 
-            if (!project.Members.Any(member => member.Id == userId)) {
+            if (!project.Members.Any(member => member.Id == userId))
+            {
                 return BadRequest("user was not in the project");
             }
 
             project.Members.Remove(user);
 
-            try {
+            try
+            {
                 await _projectService.UpdateProject(project);
-            } catch (ProjectNotFoundException ex) {
-                return NotFound(new ProblemDetails {
+            }
+            catch (ProjectNotFoundException ex)
+            {
+                return NotFound(new ProblemDetails
+                {
                     Detail = ex.Message,
                 });
             }
@@ -188,14 +225,17 @@ namespace Lagalt_Backend.Controllers
         }
 
         [HttpPut("{projectId}/AddProjectApplication")]
-        public async Task<ActionResult> AddProjectApplication(int projectId, CreateProjectApplicationDTO applicationDTO) {
+        public async Task<ActionResult> AddProjectApplication(int projectId, CreateProjectApplicationDTO applicationDTO)
+        {
             var project = await _projectService.GetProjectById(projectId);
-            if (projectId != project.Id) {
+            if (projectId != project.Id)
+            {
                 return BadRequest();
             }
 
             var sender = await _userService.GetUserById(applicationDTO.ApplicantId);
-            if(sender == null || sender.Id != applicationDTO.ApplicantId) {
+            if (sender == null || sender.Id != applicationDTO.ApplicantId)
+            {
                 return BadRequest();
             }
 
@@ -207,40 +247,51 @@ namespace Lagalt_Backend.Controllers
 
             project.Applications.Add(application);
 
-            try {
+            try
+            {
                 _context.ProjectApplications.Update(application);
                 await _context.SaveChangesAsync();
                 await _projectService.UpdateProject(project);
-            } catch (ProjectNotFoundException ex) {
-                return NotFound(new ProblemDetails {
+            }
+            catch (ProjectNotFoundException ex)
+            {
+                return NotFound(new ProblemDetails
+                {
                     Detail = ex.Message,
                 });
             }
             return Ok();
         }
         [HttpPut("{applicationId}/RemoveProjectApplicationFromProject")]
-        public async Task<ActionResult> RemoveProjectApplicationFromProject(int applicationId) {
+        public async Task<ActionResult> RemoveProjectApplicationFromProject(int applicationId)
+        {
             var application = await _context.ProjectApplications.FirstOrDefaultAsync();// .FindAsync(applicationId);
-           
-            if (application == null || application.Id != applicationId) {
+
+            if (application == null || application.Id != applicationId)
+            {
                 return BadRequest();
             }
 
 
             var project = await _projectService.GetProjectById(application.ProjectId);
-            if (project == null || project.Id != application.ProjectId) {
+            if (project == null || project.Id != application.ProjectId)
+            {
                 return BadRequest();
             }
-            
+
             application.Status = "Denied";
             project.Applications.Remove(application);
 
-            try {
+            try
+            {
                 _context.ProjectApplications.Update(application);
                 await _context.SaveChangesAsync();
                 await _projectService.UpdateProject(project);
-            } catch (ProjectNotFoundException ex) {
-                return NotFound(new ProblemDetails {
+            }
+            catch (ProjectNotFoundException ex)
+            {
+                return NotFound(new ProblemDetails
+                {
                     Detail = ex.Message,
                 });
             }
@@ -248,29 +299,37 @@ namespace Lagalt_Backend.Controllers
             return Ok();
         }
         [HttpPut("{applicationId}/AcceptProjectApplication")]
-        public async Task<ActionResult> AcceptProjectApplication(int applicationId) {
+        public async Task<ActionResult> AcceptProjectApplication(int applicationId)
+        {
             var application = await _context.ProjectApplications.FindAsync(applicationId);
 
-            if (application == null || application.Id != applicationId) {
+            if (application == null || application.Id != applicationId)
+            {
                 return BadRequest();
             }
 
-            try {
+            try
+            {
                 await AddMemberToProject(application.ProjectId, application.ApplicantId);
                 _context.ProjectApplications.Remove(application);
                 await _context.SaveChangesAsync();
-            } catch (ProjectNotFoundException ex) {
-                return NotFound(new ProblemDetails {
+            }
+            catch (ProjectNotFoundException ex)
+            {
+                return NotFound(new ProblemDetails
+                {
                     Detail = ex.Message,
                 });
             }
 
             return Ok();
         }
-        [HttpPut("{projectId}/AddMessage")]
-        public async Task<ActionResult> AddMessage(int projectId, CreateMessageDTO messageDTO) {
+        /*[HttpPut("{projectId}/AddMessage")]
+        public async Task<ActionResult> AddMessage(int projectId, CreateMessageDTO messageDTO)
+        {
             var project = await _projectService.GetProjectById(projectId);
-            if (projectId != project.Id) {
+            if (projectId != project.Id)
+            {
                 return BadRequest();
             }
             Message message = _mapper.Map<Message>(messageDTO);
@@ -278,32 +337,42 @@ namespace Lagalt_Backend.Controllers
 
             //find senders name
             var sender = await _context.Users.FindAsync(message.SenderId);
-            if (sender == null) {
+            if (sender == null)
+            {
                 return BadRequest("sender is not a existing user");
             }
             message.SenderName = sender.UserName;
 
             project.Messages.Add(message);
 
-            try {
+            try
+            {
                 _context.Messages.Update(message);
                 await _context.SaveChangesAsync();
                 await _projectService.UpdateProject(project);
-            } catch (ProjectNotFoundException ex) {
-                return NotFound(new ProblemDetails {
+            }
+            catch (ProjectNotFoundException ex)
+            {
+                return NotFound(new ProblemDetails
+                {
                     Detail = ex.Message,
                 });
             }
 
             return Ok();
-        }
+        }*/
         [HttpGet("{id}/projectApplication")]
-        public async Task<ActionResult<ProjectApplication>> GetProjectApplication(int id) {
-            try {
+        public async Task<ActionResult<ProjectApplication>> GetProjectApplication(int id)
+        {
+            try
+            {
                 var application = await _projectService.GetProjectApplicationById(id);
                 return Ok(application);
-            } catch (ProjectNotFoundException ex) {
-                return NotFound(new ProblemDetails {
+            }
+            catch (ProjectNotFoundException ex)
+            {
+                return NotFound(new ProblemDetails
+                {
                     Detail = ex.Message,
                 });
             }
@@ -315,8 +384,9 @@ namespace Lagalt_Backend.Controllers
         public async Task<ActionResult<Project>> PostProject(CreateProjectDTO projectDTO)
         {
             var user = await _userService.GetUserById(projectDTO.OwnerId);
-            if(user == null || projectDTO.OwnerId != user.Id) {
-            return NotFound("User to set as the owner is not found");
+            if (user == null || projectDTO.OwnerId != user.Id)
+            {
+                return NotFound("User to set as the owner is not found");
             }
 
             Project project = _mapper.Map<Project>(projectDTO);
@@ -341,6 +411,30 @@ namespace Lagalt_Backend.Controllers
             }
 
             return NoContent();
+        }
+
+        [HttpPost]
+        [Route("api/Projects/{projectId}/Messages")]
+        public async Task<ActionResult<Message>> PostMessage(int projectId, [FromBody] Message message)
+        {
+            var project = await _context.Projects.FindAsync(projectId);
+            if (project == null)
+            {
+                return NotFound();
+            }
+
+            // Set message properties
+            message.ProjectId = projectId;
+            message.PostedTime = DateTime.UtcNow;
+
+            _context.Messages.Add(message);
+            await _context.SaveChangesAsync();
+
+            // Publish message to message channel
+            var pusher = new Pusher("1571470", "7aacd8aa34fa1abfd9bf", "77e7122b45ae7be20fd3");
+            var result = await pusher.TriggerAsync("messages", "new-message", message);
+
+            return CreatedAtAction("GetMessage", new { id = message.Id }, message);
         }
     }
 }

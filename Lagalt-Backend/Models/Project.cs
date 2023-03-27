@@ -11,13 +11,13 @@ namespace Lagalt_Backend.Models
         public string Description { get; set; }
         public string CategoryName { get; set; }
         public bool IsAvailable { get; set; }
-
-
         public string RepositoryLink { get; set; } = "";
+
+        public ICollection<Message> Messages { get; set; }
 
         [JsonIgnore]
         public virtual List<User> Members { get; set; } = new List<User>();
         public virtual List<ProjectApplication> Applications { get; set; } = new List<ProjectApplication>();
-        public virtual List<Message> Messages { get; set; } = new List<Message>();
+        //public virtual List<Message> Messages { get; set; } = new List<Message>();
     }
 }

@@ -580,3 +580,13 @@ C:\Users\EGus01\Documents\GitHub\Lagalt-Backend\Lagalt-Backend\bin\Debug\net6.0\
 C:\Users\EGus01\Documents\GitHub\Lagalt-Backend\Lagalt-Backend\bin\Debug\net6.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
 C:\Users\MNiazi.CORP\Documents\GitHub\Lagalt-Backend\Lagalt-Backend\bin\Debug\net6.0\AutoMapper.dll
 C:\Users\MNiazi.CORP\Documents\GitHub\Lagalt-Backend\Lagalt-Backend\bin\Debug\net6.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
+C:\Users\MNiazi.CORP\Documents\GitHub\Lagalt-Backend\Lagalt-Backend\bin\Debug\net6.0\System.Net.Http.Formatting.dll
+C:\Users\MNiazi.CORP\Documents\GitHub\Lagalt-Backend\Lagalt-Backend\bin\Debug\net6.0\System.Web.Http.dll
+C:\Users\MNiazi.CORP\Documents\GitHub\Lagalt-Backend\Lagalt-Backend\bin\Debug\net6.0\Microsoft.AspNet.WebHooks.Common.dll
+C:\Users\MNiazi.CORP\Documents\GitHub\Lagalt-Backend\Lagalt-Backend\bin\Debug\net6.0\Microsoft.AspNet.WebHooks.Receivers.dll
+C:\Users\MNiazi.CORP\Documents\GitHub\Lagalt-Backend\Lagalt-Backend\bin\Debug\net6.0\Microsoft.AspNet.WebHooks.Receivers.Pusher.dll
+C:\Users\MNiazi.CORP\Documents\GitHub\Lagalt-Backend\Lagalt-Backend\bin\Debug\net6.0\NaCl.dll
+C:\Users\MNiazi.CORP\Documents\GitHub\Lagalt-Backend\Lagalt-Backend\bin\Debug\net6.0\PusherClient.dll
+C:\Users\MNiazi.CORP\Documents\GitHub\Lagalt-Backend\Lagalt-Backend\bin\Debug\net6.0\PusherServer.dll
+C:\Users\MNiazi.CORP\Documents\GitHub\Lagalt-Backend\Lagalt-Backend\bin\Debug\net6.0\SuperSocket.ClientEngine.dll
+C:\Users\MNiazi.CORP\Documents\GitHub\Lagalt-Backend\Lagalt-Backend\bin\Debug\net6.0\WebSocket4Net.dll

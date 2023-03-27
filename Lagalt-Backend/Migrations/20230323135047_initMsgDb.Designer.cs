@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Lagalt_Backend.Migrations
 {
     [DbContext(typeof(LagaltDbContext))]
-    [Migration("20230322081824_initDb")]
-    partial class initDb
+    [Migration("20230323135047_initMsgDb")]
+    partial class initMsgDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,6 +32,9 @@ namespace Lagalt_Backend.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("PostedTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("ProjectId")
                         .HasColumnType("int");

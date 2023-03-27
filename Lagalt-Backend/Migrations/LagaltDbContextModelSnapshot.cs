@@ -30,6 +30,9 @@ namespace Lagalt_Backend.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("PostedTime")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("ProjectId")
                         .HasColumnType("int");
 

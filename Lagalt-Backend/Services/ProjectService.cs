@@ -37,7 +37,7 @@ namespace Lagalt_Backend.Services
             var project = await _context.Projects
                .Include(p => p.Messages)
                .Include(p => p.Members)
-               .FirstOrDefaultAsync(p => p.Id == id);
+               .SingleOrDefaultAsync(p => p.Id == id);
             if (project == null) {
                 throw new ProjectNotFoundException(id);
             }
