@@ -19,7 +19,7 @@ namespace Lagalt_Backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     [Produces(MediaTypeNames.Application.Json)]
     [Consumes(MediaTypeNames.Application.Json)]
     [ApiConventionType(typeof(DefaultApiConventions))]
@@ -36,13 +36,14 @@ namespace Lagalt_Backend.Controllers
             _mapper = mapper;
             _context = context;
         }
-
+        [Authorize]
         // GET: api/Projects
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ReadProjectAdminInfoDTO>>> GetProjects() {
             var projects = _mapper.Map<List<ReadProjectAdminInfoDTO>>(await _context.Projects.Include(p => p.Applications).Include(p => p.Messages).ToListAsync());
             return Ok(projects);
         }
+
         [HttpGet("{id}/ProjectExist")]
         public async Task<ActionResult<bool>> ReadIfProjectExist(int id) {
             try {
@@ -61,6 +62,7 @@ namespace Lagalt_Backend.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        [Authorize]
         [HttpGet("UsersRelationToProject")]
         public async Task<ActionResult<int>> UsersRelationToProject(int projectId, int userId) {
             //verif the user exist
@@ -86,7 +88,7 @@ namespace Lagalt_Backend.Controllers
                 });
             }
         }
-
+        [Authorize]
         [HttpGet("{projectId}/AdminProjectView")]
         public async Task<ActionResult<ReadProjectAdminInfoDTO>> GetAdminProjectView(int projectId, int userId) {
             var user = await _userService.GetUserById(userId);
@@ -105,6 +107,8 @@ namespace Lagalt_Backend.Controllers
                 });
             }
         }
+
+        [Authorize]
         [HttpGet("{projectId}/CollaboratorProjectView")]
         public async Task<ActionResult<ReadProjectCollaboratorInfoDTO>> GetCollaboratorProjectView(int projectId, int userId) {
             var user = await _userService.GetUserById(userId);
@@ -160,21 +164,9 @@ namespace Lagalt_Backend.Controllers
             return Ok(_mapper.Map<List<GetProjectForMainDTO>>(projects).GetRange(start, end - start + 1));
         }
 
-        // GET: api/Projects/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<GetProjectDetails>> GetProject(int id) {
-            try {
-                var project = await _projectService.GetProjectById(id);
-                return Ok(_mapper.Map<GetProjectDetails>(project));
-            } catch (ProjectNotFoundException ex) {
-                return NotFound(new ProblemDetails {
-                    Detail = ex.Message,
-                });
-            }
-        }
-
         // PUT: api/Projects/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<ActionResult> PutProject(int id, EditProjectDTO projectDTO) {
             var project = await _projectService.GetProjectById(id);
@@ -197,6 +189,8 @@ namespace Lagalt_Backend.Controllers
 
             return Ok();
         }
+
+        [Authorize]
         [HttpPut("{projectId}/AddMemberToProject")]
         public async Task<ActionResult> AddMemberToProject(int projectId, int userId) {
             var project = await _projectService.GetProjectById(projectId);
@@ -221,6 +215,8 @@ namespace Lagalt_Backend.Controllers
 
             return Ok();
         }
+
+        [Authorize]
         [HttpPut("{projectId}/RemoveMemberFromProject")]
         public async Task<ActionResult> RemoveMemberFromProject(int projectId, int userId) {
             var project = await _projectService.GetProjectById(projectId);
@@ -253,6 +249,7 @@ namespace Lagalt_Backend.Controllers
             return Ok();
         }
 
+        [Authorize]
         [HttpPut("{projectId}/AddProjectApplication")]
         public async Task<ActionResult> AddProjectApplication(int projectId, CreateProjectApplicationDTO applicationDTO) {
             var project = await _projectService.GetProjectById(projectId);
@@ -284,6 +281,8 @@ namespace Lagalt_Backend.Controllers
             }
             return Ok();
         }
+
+        [Authorize]
         [HttpPut("{applicationId}/RemoveProjectApplicationFromProject")]
         public async Task<ActionResult> RemoveProjectApplicationFromProject(int applicationId) {
             var application = await _context.ProjectApplications.FirstOrDefaultAsync();// .FindAsync(applicationId);
@@ -313,6 +312,8 @@ namespace Lagalt_Backend.Controllers
 
             return Ok();
         }
+
+        [Authorize]
         [HttpPut("{applicationId}/AcceptProjectApplication")]
         public async Task<ActionResult> AcceptProjectApplication(int applicationId) {
             var application = await _context.ProjectApplications.FindAsync(applicationId);
@@ -333,6 +334,8 @@ namespace Lagalt_Backend.Controllers
 
             return Ok();
         }
+
+        [Authorize]
         [HttpPut("{projectId}/AddMessage")]
         public async Task<ActionResult> AddMessage(int projectId, CreateMessageDTO messageDTO) {
             var project = await _projectService.GetProjectById(projectId);
@@ -363,6 +366,8 @@ namespace Lagalt_Backend.Controllers
 
             return Ok();
         }
+
+        [Authorize]
         [HttpGet("{id}/projectApplication")]
         public async Task<ActionResult<ProjectApplication>> GetProjectApplication(int id) {
             try {
@@ -377,6 +382,7 @@ namespace Lagalt_Backend.Controllers
 
         // POST: api/Projects
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<Project>> PostProject(CreateProjectDTO projectDTO) {
             var user = await _userService.GetUserById(projectDTO.OwnerId);
@@ -390,6 +396,7 @@ namespace Lagalt_Backend.Controllers
         }
 
         // DELETE: api/Projects/5
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteProject(int id) {
             try {
