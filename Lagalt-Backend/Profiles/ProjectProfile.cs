@@ -12,14 +12,6 @@ namespace Lagalt_Backend.Profiles
 
 
             const int MAX_DESC_LENGTH = 100;
-
-            CreateMap<Project, GetProjectForMainDTO>()
-                .ForMember(dest => dest.Description, opt => {
-                    opt.MapFrom(src => src.Description.Length > MAX_DESC_LENGTH ?
-                    src.Description.Substring(0, MAX_DESC_LENGTH - 3).TrimEnd() + "..." :
-                    src.Description);
-                });
-
             CreateMap<Project, ReadProjectNameDTO>()
                .ForMember(dest => dest.Description, opt => {
                    opt.MapFrom(src => src.Description.Length > MAX_DESC_LENGTH ?

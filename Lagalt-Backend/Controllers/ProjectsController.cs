@@ -12,6 +12,8 @@ using Lagalt_Backend.Models.DTO.Project;
 using AutoMapper;
 using Lagalt_Backend.Models.DTO.ProjectApplication;
 using Lagalt_Backend.Models.DTO.Message;
+using Newtonsoft.Json;
+using NuGet.Protocol.Core.Types;
 
 namespace Lagalt_Backend.Controllers
 {
@@ -85,11 +87,11 @@ namespace Lagalt_Backend.Controllers
         public async Task<ActionResult<ReadProjectAdminInfoDTO>> GetAdminProjectView(int projectId, int userId) {
             var user = await _userService.GetUserById(userId);
             if (user == null || user.Id != userId) return NotFound("The user was not found");
-            
+
             var project = await _projectService.GetProjectById(projectId);
             if (project == null || project.Id != projectId) return NotFound("The project was not found");
-            
-            if(project.OwnerId != userId) return Unauthorized("The user do not have acces to view this material"); 
+
+            if (project.OwnerId != userId) return Unauthorized("The user do not have acces to view this material");
 
             try {
                 return Ok(_mapper.Map<ReadProjectAdminInfoDTO>(await _projectService.GetProjectInAdminViewById(projectId)));
@@ -103,10 +105,10 @@ namespace Lagalt_Backend.Controllers
         public async Task<ActionResult<ReadProjectCollaboratorInfoDTO>> GetCollaboratorProjectView(int projectId, int userId) {
             var user = await _userService.GetUserById(userId);
             if (user == null || user.Id != userId) return NotFound("The user was not found");
-            
+
             var project = await _projectService.GetProjectById(projectId);
             if (project == null || project.Id != projectId) return NotFound("The project was not found");
-            
+
             if (!project.Members.Any(member => member.Id == userId)) return Unauthorized("The user do not have acces to view this material");
 
             try {
@@ -133,10 +135,30 @@ namespace Lagalt_Backend.Controllers
         }
 
         [HttpGet("ProjectsForMainPage")]
-        public async Task<ActionResult<IEnumerable<GetProjectForMainDTO>>> GetMainProjects(int start, int range) {
+        public async Task<ActionResult<IEnumerable<ReadProjectNameDTO>>> GetMainProjects(int start, int range, string searchFilterJson) {
+            var searchFilter = JsonConvert.DeserializeObject<Models.JSON_objects.SearchFilter>(searchFilterJson);
+            if (searchFilter == null) return BadRequest("need to contains a searchFilter!");
+
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine(searchFilter.SearchString);
+
+
+
             var projects = await _context.Projects
-                //.Where(project => searchCatagoryType.Contains(project.CategoryName))
+                .Where(p => searchFilter.CategoryFilter.Contains(p.CategoryName) && (p.IsAvailable || searchFilter.ShowClosedProject))
                 .ToListAsync();
+
+            //the search bar was filled with something
+            if (searchFilter.SearchString != "") {
+            
+                //find any matching word in the title from the search bar
+                projects = projects.Where(project => 
+                    project.ProjectName.ToLower().Split(' ')
+                        .Intersect(searchFilter.SearchString.ToLower().Split(' '))
+                        .Any()).ToList();
+            }
 
             if (start < 0 || range < 0) {
 
@@ -151,7 +173,7 @@ namespace Lagalt_Backend.Controllers
             if (end >= projects.Count) {
                 end = projects.Count - 1;
             }
-            return Ok(_mapper.Map<List<GetProjectForMainDTO>>(projects).GetRange(start, end - start + 1));
+            return Ok(_mapper.Map<List<ReadProjectNameDTO>>(projects).GetRange(start, end - start + 1));
         }
 
         // GET: api/Projects/5
