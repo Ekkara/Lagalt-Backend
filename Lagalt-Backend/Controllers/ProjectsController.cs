@@ -12,11 +12,17 @@ using Lagalt_Backend.Models.DTO.Project;
 using AutoMapper;
 using Lagalt_Backend.Models.DTO.ProjectApplication;
 using Lagalt_Backend.Models.DTO.Message;
+using Microsoft.AspNetCore.Authorization;
+using System.Net.Mime;
 
 namespace Lagalt_Backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
+    [Produces(MediaTypeNames.Application.Json)]
+    [Consumes(MediaTypeNames.Application.Json)]
+    [ApiConventionType(typeof(DefaultApiConventions))]
     public class ProjectsController : ControllerBase
     {
         private readonly IUserService _userService;
