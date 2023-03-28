@@ -20,7 +20,7 @@ namespace Lagalt_Backend.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     [Produces(MediaTypeNames.Application.Json)]
     [Consumes(MediaTypeNames.Application.Json)]
     [ApiConventionType(typeof(DefaultApiConventions))]
@@ -36,14 +36,14 @@ namespace Lagalt_Backend.Controllers
             _mapper = mapper;
         }
 
-        [Authorize]
+        //[Authorize]
         // GET: api/Users
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers() {
             return Ok(await _userService.GetAllUsers());
         }
 
-        [Authorize]
+       // [Authorize]
         [HttpGet("/GetId")]
         public async Task<ActionResult<int>> GetUserId(string keycloakId, string username) {
             var user = await _userService.GetUserAsyncKeycloak(keycloakId, username);
@@ -70,7 +70,7 @@ namespace Lagalt_Backend.Controllers
         //    Response.Headers.Add("Location", profileUrl);
         //    return StatusCode(303);
         //}
-        [Authorize]
+        //[Authorize]
         [HttpPut("{id}/UpdateUser")]
         public async Task<IActionResult> UpdateUser(int id, EditUserDTO userDTO)
         {
@@ -159,7 +159,7 @@ namespace Lagalt_Backend.Controllers
         // PUT: api/Users/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
 
-        [Authorize]
+        //[Authorize]
         [HttpPut("{id}/AddSkill")]
         public async Task<ActionResult> AddSkillToUser(int id, string skill) {
             skill = skill.Trim();
@@ -198,7 +198,7 @@ namespace Lagalt_Backend.Controllers
             return NoContent();
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpPut("{id}/RemoveSkill")]
         public async Task<ActionResult> RemoveSkillToUser(int id, string skill) {
             var user = await _userService.GetUserById(id);
@@ -224,7 +224,7 @@ namespace Lagalt_Backend.Controllers
 
         // POST: api/Users
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [Authorize]
+        //[Authorize]
         [HttpPost]
         public async Task<ActionResult<User>> PostUser(CreateUserDTO userDTO) {
             var user = _mapper.Map<User>(userDTO);
@@ -232,7 +232,7 @@ namespace Lagalt_Backend.Controllers
         }
 
         // DELETE: api/Users/5
-        [Authorize]
+        //[Authorize]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteUser(int id) {
             try {

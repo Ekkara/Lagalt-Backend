@@ -2,6 +2,7 @@
 {
     public class CreateProjectDTO
     {
+        public int id { get; set; }
         public int OwnerId { get; set; }
         public string ProjectName { get; set; }
         public string Description { get; set; }
