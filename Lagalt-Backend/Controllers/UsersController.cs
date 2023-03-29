@@ -20,7 +20,7 @@ namespace Lagalt_Backend.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     [Produces(MediaTypeNames.Application.Json)]
     [Consumes(MediaTypeNames.Application.Json)]
     [ApiConventionType(typeof(DefaultApiConventions))]
@@ -36,14 +36,14 @@ namespace Lagalt_Backend.Controllers
             _mapper = mapper;
         }
 
-        //[Authorize]
+        [Authorize]
         // GET: api/Users
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers() {
             return Ok(await _userService.GetAllUsers());
         }
 
-       // [Authorize]
+         [Authorize]
         [HttpGet("/GetId")]
         public async Task<ActionResult<int>> GetUserId(string keycloakId, string username) {
             var user = await _userService.GetUserAsyncKeycloak(keycloakId, username);
@@ -70,10 +70,9 @@ namespace Lagalt_Backend.Controllers
         //    Response.Headers.Add("Location", profileUrl);
         //    return StatusCode(303);
         //}
-        //[Authorize]
+        [Authorize]
         [HttpPut("{id}/UpdateUser")]
-        public async Task<IActionResult> UpdateUser(int id, EditUserDTO userDTO)
-        {
+        public async Task<IActionResult> UpdateUser(int id, EditUserDTO userDTO) {
             var user = await _userService.GetUserById(id);
             if (user == null || user.Id != id) { return BadRequest("User not found"); }
 
@@ -122,11 +121,12 @@ namespace Lagalt_Backend.Controllers
 
 
         // GET: api/Users/5
+        [Authorize]
         [HttpGet("{userId}")]
         public async Task<ActionResult<ReadUserDTO>> GetUser(int userId, int viewerId) {
             var user = await _userService.GetUserById(userId);
-            if(user == null || user.Id != userId) {
-            return BadRequest();
+            if (user == null || user.Id != userId) {
+                return BadRequest();
             }
 
             ReadUserDTO userDTO = _mapper.Map<ReadUserDTO>(user);
@@ -156,6 +156,30 @@ namespace Lagalt_Backend.Controllers
             }
         }
 
+        [HttpGet("{userId}/getUserByIdNotLoggedIn")]
+        public async Task<ActionResult<ReadUserDTO>> getUserByIdNotLoggedIn(int userId) {
+            var user = await _userService.GetUserById(userId);
+            if (user == null || user.Id != userId) {
+                return BadRequest();
+            }
+
+            ReadUserDTO userDTO = _mapper.Map<ReadUserDTO>(user);
+            userDTO.DisplayingProfile = true;
+
+            if (user.IsProfileHiden) {
+                userDTO.Projects = new List<Models.DTO.Project.ReadProjectNameDTO>();
+                userDTO.Skills = new List<Skill>();
+                userDTO.Description = "This user's profile is set to be hidden";
+                userDTO.DisplayingProfile = false;
+            }
+            try {
+                return userDTO;
+            } catch (UserNotFoundException ex) {
+                return NotFound(new ProblemDetails {
+                    Detail = ex.Message,
+                });
+            }
+        }
         // PUT: api/Users/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
 
@@ -171,15 +195,18 @@ namespace Lagalt_Backend.Controllers
             if (id != user.Id) {
                 return NotFound();
             }
+            string myHeader = Request.Headers["Authorization"];
+            Console.WriteLine("ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss");
+            Console.WriteLine(myHeader);
 
-            if(user.Skills.Any(s => s.Name.ToLower() == skill.ToLower())) {
+            if (user.Skills.Any(s => s.Name.ToLower() == skill.ToLower())) {
                 return BadRequest("the skill is already in user");
             }
 
 
             //See if skills exist 
             var addSkill = await _context.Skills.FirstOrDefaultAsync(s => s.Name == skill);
-            if(addSkill == null) {
+            if (addSkill == null) {
                 Skill newSkill = new Skill { Name = skill };
                 user.Skills.Add(newSkill);
             }
@@ -198,7 +225,7 @@ namespace Lagalt_Backend.Controllers
             return NoContent();
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpPut("{id}/RemoveSkill")]
         public async Task<ActionResult> RemoveSkillToUser(int id, string skill) {
             var user = await _userService.GetUserById(id);
@@ -206,7 +233,7 @@ namespace Lagalt_Backend.Controllers
                 return NotFound();
             }
 
-            if(!user.Skills.Any(s => s.Name == skill)) {
+            if (!user.Skills.Any(s => s.Name == skill)) {
                 return NotFound();
             }
             user.Skills.RemoveAll(s => s.Name == skill);
@@ -224,7 +251,7 @@ namespace Lagalt_Backend.Controllers
 
         // POST: api/Users
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[Authorize]
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<User>> PostUser(CreateUserDTO userDTO) {
             var user = _mapper.Map<User>(userDTO);
@@ -232,7 +259,7 @@ namespace Lagalt_Backend.Controllers
         }
 
         // DELETE: api/Users/5
-        //[Authorize]
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteUser(int id) {
             try {

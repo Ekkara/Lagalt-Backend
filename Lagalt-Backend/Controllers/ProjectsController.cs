@@ -21,7 +21,7 @@ namespace Lagalt_Backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     [Produces(MediaTypeNames.Application.Json)]
     [Consumes(MediaTypeNames.Application.Json)]
     [ApiConventionType(typeof(DefaultApiConventions))]
@@ -38,7 +38,7 @@ namespace Lagalt_Backend.Controllers
             _mapper = mapper;
             _context = context;
         }
-        //[Authorize]
+        [Authorize]
         // GET: api/Projects
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ReadProjectAdminInfoDTO>>> GetProjects() {
@@ -76,7 +76,7 @@ namespace Lagalt_Backend.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        //[Authorize]
+        [Authorize]
         [HttpGet("UsersRelationToProject")]
         public async Task<ActionResult<int>> UsersRelationToProject(int projectId, int userId) {
             //verif the user exist
@@ -102,7 +102,7 @@ namespace Lagalt_Backend.Controllers
                 });
             }
         }
-        //[Authorize]
+        [Authorize]
         [HttpGet("{projectId}/AdminProjectView")]
         public async Task<ActionResult<ReadProjectAdminInfoDTO>> GetAdminProjectView(int projectId, int userId) {
             var user = await _userService.GetUserById(userId);
@@ -122,7 +122,7 @@ namespace Lagalt_Backend.Controllers
             }
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpGet("{projectId}/CollaboratorProjectView")]
         public async Task<ActionResult<ReadProjectCollaboratorInfoDTO>> GetCollaboratorProjectView(int projectId, int userId) {
             var user = await _userService.GetUserById(userId);
@@ -161,13 +161,6 @@ namespace Lagalt_Backend.Controllers
             var searchFilter = JsonConvert.DeserializeObject<Models.JSON_objects.SearchFilter>(searchFilterJson);
             if (searchFilter == null) return BadRequest("need to contains a searchFilter!");
 
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine(searchFilter.SearchString);
-
-
-
             var projects = await _context.Projects
                 .Where(p => searchFilter.CategoryFilter.Contains(p.CategoryName) && (p.IsAvailable || searchFilter.ShowClosedProject))
                 .ToListAsync();
@@ -200,7 +193,7 @@ namespace Lagalt_Backend.Controllers
 
         // PUT: api/Projects/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[Authorize]
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<ActionResult> PutProject(int id, EditProjectDTO projectDTO) {
             var project = await _projectService.GetProjectById(id);
@@ -224,7 +217,7 @@ namespace Lagalt_Backend.Controllers
             return Ok();
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpPut("{projectId}/AddMemberToProject")]
         public async Task<ActionResult> AddMemberToProject(int projectId, int userId) {
             var project = await _projectService.GetProjectById(projectId);
@@ -250,7 +243,7 @@ namespace Lagalt_Backend.Controllers
             return Ok();
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpPut("{projectId}/RemoveMemberFromProject")]
         public async Task<ActionResult> RemoveMemberFromProject(int projectId, int userId) {
             var project = await _projectService.GetProjectById(projectId);
@@ -283,7 +276,7 @@ namespace Lagalt_Backend.Controllers
             return Ok();
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpPut("{projectId}/AddProjectApplication")]
         public async Task<ActionResult> AddProjectApplication(int projectId, CreateProjectApplicationDTO applicationDTO) {
             var project = await _projectService.GetProjectById(projectId);
@@ -316,7 +309,7 @@ namespace Lagalt_Backend.Controllers
             return Ok();
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpPut("{applicationId}/RemoveProjectApplicationFromProject")]
         public async Task<ActionResult> RemoveProjectApplicationFromProject(int applicationId) {
             var application = await _context.ProjectApplications.FirstOrDefaultAsync();// .FindAsync(applicationId);
@@ -347,7 +340,7 @@ namespace Lagalt_Backend.Controllers
             return Ok();
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpPut("{applicationId}/AcceptProjectApplication")]
         public async Task<ActionResult> AcceptProjectApplication(int applicationId) {
             var application = await _context.ProjectApplications.FindAsync(applicationId);
@@ -369,7 +362,7 @@ namespace Lagalt_Backend.Controllers
             return Ok();
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpPut("{projectId}/AddMessage")]
         public async Task<ActionResult> AddMessage(int projectId, CreateMessageDTO messageDTO) {
             var project = await _projectService.GetProjectById(projectId);
@@ -401,7 +394,7 @@ namespace Lagalt_Backend.Controllers
             return Ok();
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpGet("{id}/projectApplication")]
         public async Task<ActionResult<ProjectApplication>> GetProjectApplication(int id) {
             try {
@@ -416,7 +409,7 @@ namespace Lagalt_Backend.Controllers
 
         // POST: api/Projects
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[Authorize]
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<Project>> PostProject(CreateProjectDTO projectDTO) {
             var user = await _userService.GetUserById(projectDTO.OwnerId);
@@ -430,7 +423,7 @@ namespace Lagalt_Backend.Controllers
         }
 
         // DELETE: api/Projects/5
-        //[Authorize]
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteProject(int id) {
             try {
