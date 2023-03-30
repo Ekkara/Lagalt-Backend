@@ -9,12 +9,12 @@ and custom mock data to facilitate testing of all API endpoints. Query parameter
 
 ## Contents:
 
-Overview
-Prerequisites
-Getting Started
-Usage Instructions
-Database Diagram
-License Information
+- Overview
+- Prerequisites
+- Getting Started
+- Usage Instructions
+- Database Diagram
+- License Information
 
 ## Overview:
 The Lagalt.no Backend offers an array of essential features, including:
@@ -56,6 +56,6 @@ entities is available within the project documentation.
 ![LagaltNo-CaseDigram](https://user-images.githubusercontent.com/60743602/228863642-43f4996e-de33-4137-b283-c4dedb9539a3.PNG)
 
 ## License Information:
-- Refer to the LICENSE file within the project repository for information regarding the licensing and usage of the Lagalt.no Backend.
+- Refer to the LICENSE file within the project repository for information regarding the licensing and Lagalt is licensed under the MIT License.
 
 Made by: Erik Gustafsson, Mikael Niazi and Tommy Pham
