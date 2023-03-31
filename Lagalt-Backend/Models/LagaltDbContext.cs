@@ -17,6 +17,8 @@ namespace Lagalt_Backend.Models
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
+
+            //set primary keys
             modelBuilder.Entity<Project>()
                 .HasKey(o => o.Id);
 
@@ -26,6 +28,7 @@ namespace Lagalt_Backend.Models
             modelBuilder.Entity<ProjectApplication>()
                 .HasKey(od => od.Id);
 
+            //set a set a one to one relationship
             modelBuilder.Entity<ProjectApplication>()
                 .HasOne(od => od.Project)
                 .WithMany(o => o.Applications)
@@ -40,6 +43,7 @@ namespace Lagalt_Backend.Models
                 .WithMany(o => o.Messages)
                 .HasForeignKey(od => od.ProjectId);
 
+            //set up a many to many relationship
              modelBuilder.Entity<User>()
                  .HasMany<Project>(user => user.Projects)
                  .WithMany(project => project.Members)
@@ -59,14 +63,14 @@ namespace Lagalt_Backend.Models
             modelBuilder.Entity<Skill>()
                 .HasKey(od => od.Id);
 
-
+            //set in seed data
             modelBuilder.Entity<User>().HasData(
                 new User { Id = 1,KeycloakId = "20a04c91-29d4-4603-a640-e94908d22175", UserName = "Maddie", IsProfileHiden = true },
                 new User { Id = 2,KeycloakId= "04b29fd4-862e-452f-a48d-d987a68c0104", UserName = "Alice", IsProfileHiden = false }
                 );
 
             modelBuilder.Entity<Project>().HasData(
-                new Project { Id = 1, ProjectName = "Final Fantasy XIV", Description = "World-Class MMORPG", CategoryName = "Games", IsAvailable = true },
+                new Project { Id = 1, ProjectName = "Final Fantasy XIV", Description = "World-Class MMORPG", CategoryName = "Game", IsAvailable = true },
                 new Project { Id = 2, ProjectName = "Scream", Description = "Rock song doubling as a boss theme", CategoryName = "Music", IsAvailable = false }
                 );
         }

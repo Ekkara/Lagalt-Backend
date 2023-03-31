@@ -290,7 +290,6 @@ namespace Lagalt_Backend.Controllers
             }
 
             ProjectApplication application = _mapper.Map<ProjectApplication>(applicationDTO);
-            //application.ProjectId = projectId;
             application.Project = project;
             application.ApplicantName = sender.UserName;
             application.Date = DateTime.Now.ToShortDateString();

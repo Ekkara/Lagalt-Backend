@@ -1,20 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Lagalt_Backend.Models;
 using Lagalt_Backend.Services;
 using Lagalt_Backend.Exceptions;
-using System.Net;
 using Lagalt_Backend.Models.DTO.User;
-using Lagalt_Backend.Helpers;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using System.Net.Mime;
-using Lagalt_Backend.Helpers;
 
 namespace Lagalt_Backend.Controllers
 {
@@ -49,27 +44,7 @@ namespace Lagalt_Backend.Controllers
             var user = await _userService.GetUserAsyncKeycloak(keycloakId, username);
             return Ok(user.Id);
         }
-        //[HttpGet("GetUserprofile")]
-        //public async Task<ActionResult> GetUserProfile()
-        //{
-        //    var keycloakId = User.GetId();
-        //    var username = User.GetUsername();
 
-        //    if (string.IsNullOrEmpty(keycloakId) || string.IsNullOrEmpty(username))
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    var user = await _userService.GetUserAsyncKeycloak(keycloakId, username);
-        //    if (user == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var profileUrl = Url.Action("GetUser", "Users", new { id = user.Id }, Request.Scheme);
-        //    Response.Headers.Add("Location", profileUrl);
-        //    return StatusCode(303);
-        //}
         [Authorize]
         [HttpPut("{id}/UpdateUser")]
         public async Task<IActionResult> UpdateUser(int id, EditUserDTO userDTO) {
@@ -88,34 +63,6 @@ namespace Lagalt_Backend.Controllers
             }
 
             return NoContent();
-            //var keycloakId = User.GetId();
-            //if (string.IsNullOrEmpty(keycloakId))
-            //{
-            //    return BadRequest("Invalid Keycloak ID.");
-            //}
-
-            //var userToPatch = _userService.GetUserFromKeyCloak(keycloakId);
-            //if (userToPatch == null)
-            //{
-            //    return NotFound("User not found.");
-            //}
-
-            //if (userToPatch.Id != id)
-            //{
-            //    return BadRequest("User ID mismatch.");
-            //}
-
-            //var updatedUser = _mapper.Map<User>(userDTO);
-            //try
-            //{
-            //    await _userService.UpdateUserAsyncPatch(updatedUser, userToPatch);
-            //}
-            //catch (Exception ex)
-            //{
-            //    return StatusCode(500, $"Error updating user: {ex.Message}");
-            //}
-
-            //return Ok(userToPatch);
         }
 
 
@@ -195,10 +142,6 @@ namespace Lagalt_Backend.Controllers
             if (id != user.Id) {
                 return NotFound();
             }
-            string myHeader = Request.Headers["Authorization"];
-            Console.WriteLine("ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss");
-            Console.WriteLine(myHeader);
-
             if (user.Skills.Any(s => s.Name.ToLower() == skill.ToLower())) {
                 return BadRequest("the skill is already in user");
             }
